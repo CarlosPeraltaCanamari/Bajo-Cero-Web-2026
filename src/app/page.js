@@ -1,0 +1,220 @@
+import Image from 'next/image'
+import Link from 'next/link'
+
+export default function Home() {
+    return (
+        <main style={{ background: '#07100F' }}>
+
+            {/* HERO */}
+            <section className="relative h-screen flex items-center justify-center overflow-hidden">
+                <Image
+                    src="/hero.png"
+                    alt="Bajo Cero"
+                    fill
+                    className="object-cover object-center scale-105"
+                    priority
+                />
+                <div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/20 to-black/80" />
+
+                <div className="relative z-10 flex flex-col items-center text-center px-4 pt-16">
+                    <p className="text-white/50 text-xs uppercase tracking-[6px] mb-6 font-medium">
+                        Bolivia · Agua Premium
+                    </p>
+                    <h1
+                        className="text-6xl md:text-8xl font-black text-white mb-6 leading-none tracking-tight"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                        bajo cero
+                    </h1>
+                    <p className="text-white/60 text-base md:text-lg mb-10 max-w-sm leading-relaxed">
+                        Pureza desde las alturas de Bolivia. Directa a tu puerta.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <Link href="/catalogo" className="glass px-7 py-3 rounded-full text-white text-sm font-semibold hover:bg-white/15 transition-all duration-300">
+                            Ver catálogo
+                        </Link>
+                        <Link href="/mayorista" className="px-7 py-3 rounded-full text-white text-sm font-semibold bg-bc-orange hover:bg-bc-orange-dark transition-all duration-300 shadow-lg shadow-orange-500/20">
+                            Comprar al por mayor
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+                    <span className="text-white/30 text-[10px] tracking-[4px] uppercase">scroll</span>
+                    <div className="w-px h-10 bg-linear-to-b from-white/30 to-transparent" />
+                </div>
+            </section>
+
+            {/* STATS — fondo azul agua oscuro */}
+            <section style={{
+                padding: '64px 48px',
+                position: 'relative',
+                background: 'linear-gradient(180deg, #07100F 0%, #0C1E26 100%)',
+                overflow: 'hidden',
+            }}>
+                {/* Glow azul agua */}
+                <div style={{
+                    position: 'absolute', top: '-40px', left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '800px', height: '200px',
+                    background: 'radial-gradient(ellipse, rgba(44,95,122,0.35) 0%, transparent 70%)',
+                    pointerEvents: 'none',
+                }} />
+                {/* Mosaico grid */}
+                <div style={{
+                    position: 'absolute', inset: 0, opacity: 0.04,
+                    backgroundImage: `linear-gradient(rgba(123,184,200,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(123,184,200,0.8) 1px, transparent 1px)`,
+                    backgroundSize: '40px 40px',
+                }} />
+
+                <div style={{ maxWidth: '960px', margin: '0 auto', position: 'relative' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+                        {[
+                            { num: '15+', label: 'Años de experiencia' },
+                            { num: '50K', label: 'Clientes satisfechos' },
+                            { num: '100%', label: 'Pureza garantizada' },
+                            { num: '24h', label: 'Entrega rápida' },
+                        ].map((s, i) => (
+                            <div key={s.label} style={{
+                                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                                gap: '8px', padding: '32px 24px', textAlign: 'center',
+                                borderLeft: i > 0 ? '1px solid rgba(123,184,200,0.1)' : 'none',
+                            }}>
+                                <span style={{ fontFamily: 'var(--font-display)', fontSize: '42px', fontWeight: 900, color: '#A8D4E0', lineHeight: 1 }}>
+                                    {s.num}
+                                </span>
+                                <span style={{ fontSize: '11px', color: 'rgba(168,212,224,0.45)', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                                    {s.label}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Separador */}
+            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(123,184,200,0.15) 30%, rgba(123,184,200,0.15) 70%, transparent)' }} />
+
+            {/* BENEFICIOS — fondo con tono arena/rosado */}
+            <section style={{
+                padding: '80px 48px',
+                position: 'relative',
+                background: 'linear-gradient(180deg, #0C1E26 0%, #121418 50%, #0E1519 100%)',
+                overflow: 'hidden',
+            }}>
+                {/* Glow rosado atardecer en esquina */}
+                <div style={{
+                    position: 'absolute', top: '0', right: '-100px',
+                    width: '500px', height: '400px',
+                    background: 'radial-gradient(ellipse, rgba(232,180,160,0.07) 0%, transparent 65%)',
+                    pointerEvents: 'none',
+                }} />
+                {/* Glow azul izquierda */}
+                <div style={{
+                    position: 'absolute', bottom: '0', left: '-80px',
+                    width: '400px', height: '300px',
+                    background: 'radial-gradient(ellipse, rgba(44,95,122,0.15) 0%, transparent 65%)',
+                    pointerEvents: 'none',
+                }} />
+                {/* Mosaico puntos */}
+                <div style={{
+                    position: 'absolute', inset: 0, opacity: 0.03,
+                    backgroundImage: `radial-gradient(rgba(168,212,224,0.9) 1px, transparent 1px)`,
+                    backgroundSize: '24px 24px',
+                }} />
+
+                <div style={{ maxWidth: '960px', margin: '0 auto', position: 'relative' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(168,212,224,0.4)', letterSpacing: '4px', textTransform: 'uppercase', textAlign: 'center', marginBottom: '12px' }}>
+                        Por qué elegirnos
+                    </p>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: 900, color: 'white', textAlign: 'center', marginBottom: '48px' }}>
+                        Calidad que se siente
+                    </h2>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                        {[
+                            { icon: '❄️', title: 'Pureza total', desc: 'Filtración en múltiples etapas. El 99.9% de impurezas eliminadas.' },
+                            { icon: '🚚', title: 'Entrega en 24h', desc: 'Recibe tu pedido al día siguiente en toda La Paz.' },
+                            { icon: '💧', title: 'Agua viva', desc: 'Extraída de fuentes naturales de las alturas bolivianas.' },
+                        ].map((item) => (
+                            <div key={item.title} style={{
+                                background: 'rgba(123,184,200,0.05)',
+                                border: '1px solid rgba(123,184,200,0.1)',
+                                borderRadius: '20px',
+                                padding: '32px 28px',
+                                display: 'flex', flexDirection: 'column', gap: '12px',
+                                transition: 'all 0.3s',
+                            }} className="hover:bg-white/5">
+                                <span style={{ fontSize: '32px', lineHeight: 1 }}>{item.icon}</span>
+                                <h3 style={{ color: 'white', fontWeight: 600, fontSize: '15px' }}>{item.title}</h3>
+                                <p style={{ color: 'rgba(168,212,224,0.45)', fontSize: '13px', lineHeight: 1.6 }}>{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Separador */}
+            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(232,180,160,0.12) 30%, rgba(232,180,160,0.12) 70%, transparent)' }} />
+
+            {/* CTA MAYORISTA — tono arena cálido */}
+            <section style={{
+                padding: '80px 48px',
+                position: 'relative',
+                background: 'linear-gradient(180deg, #0E1519 0%, #111210 100%)',
+                overflow: 'hidden',
+            }}>
+                {/* Glow arena/rosado */}
+                <div style={{
+                    position: 'absolute', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '700px', height: '400px',
+                    background: 'radial-gradient(ellipse, rgba(196,168,130,0.07) 0%, rgba(232,180,160,0.05) 40%, transparent 70%)',
+                    pointerEvents: 'none',
+                }} />
+                {/* Mosaico diagonal */}
+                <div style={{
+                    position: 'absolute', inset: 0, opacity: 0.025,
+                    backgroundImage: `repeating-linear-gradient(45deg, rgba(196,168,130,0.6) 0px, rgba(196,168,130,0.6) 1px, transparent 1px, transparent 28px)`,
+                }} />
+                {/* Glow naranja CTA */}
+                <div style={{
+                    position: 'absolute', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '400px', height: '200px',
+                    background: 'radial-gradient(ellipse, rgba(220,120,40,0.08) 0%, transparent 70%)',
+                    pointerEvents: 'none',
+                }} />
+
+                <div style={{ maxWidth: '640px', margin: '0 auto', position: 'relative', textAlign: 'center' }}>
+                    <div style={{
+                        background: 'rgba(123,184,200,0.04)',
+                        border: '1px solid rgba(196,168,130,0.15)',
+                        borderRadius: '28px',
+                        padding: '56px 48px',
+                    }}>
+                        <p style={{ fontSize: '10px', color: 'rgba(196,168,130,0.5)', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '16px' }}>
+                            Empresas y distribuidores
+                        </p>
+                        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: 900, color: 'white', marginBottom: '16px', lineHeight: 1.1 }}>
+                            ¿Tienes un negocio?
+                        </h2>
+                        <p style={{ color: 'rgba(196,168,130,0.5)', fontSize: '14px', marginBottom: '32px', lineHeight: 1.7 }}>
+                            Precios especiales para compras al por mayor.<br />Hasta 45% de descuento según volumen.
+                        </p>
+                        <Link href="/mayorista" style={{
+                            display: 'inline-block', padding: '12px 32px',
+                            background: 'var(--color-bc-orange)', color: 'white',
+                            fontWeight: 600, fontSize: '14px', borderRadius: '999px',
+                            textDecoration: 'none',
+                            boxShadow: '0 8px 32px rgba(220,120,40,0.3)',
+                        }} className="hover:opacity-90 transition-opacity">
+                            Quiero precios mayoristas
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    )
+}
