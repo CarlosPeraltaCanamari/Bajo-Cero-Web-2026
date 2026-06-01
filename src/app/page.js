@@ -1,6 +1,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+export const metadata = {
+  title: 'Agua a Domicilio en Sucre y Santa Cruz | Bajo Cero Agua Premium',
+  description: 'Pedido y recarga de agua purificada de mesa a domicilio en Sucre y Santa Cruz de la Sierra. Distribución rápida de bidones de 20 litros con envío gratis.',
+  keywords: ['agua en sucre', 'agua en santa cruz', 'agua a domicilio sucre', 'agua a domicilio santa cruz', 'agua purificada bolivia', 'bidones de agua sucre', 'bajo cero agua', 'agua de mesa santa cruz'],
+}
+
 export default function Home() {
     return (
         <main style={{ background: '#07100F' }}>
@@ -9,7 +15,7 @@ export default function Home() {
             <section className="relative h-screen flex items-center justify-center overflow-hidden">
                 <Image
                     src="/hero.png"
-                    alt="Bajo Cero"
+                    alt="Bajo Cero - Agua Purificada Premium en Bolivia"
                     fill
                     className="object-cover object-center scale-105"
                     priority
@@ -18,7 +24,7 @@ export default function Home() {
 
                 <div className="relative z-10 flex flex-col items-center text-center px-4 pt-16">
                     <p className="text-white/50 text-xs uppercase tracking-[6px] mb-6 font-medium">
-                        Bolivia · Agua Premium
+                        Bolivia · Agua Premium a Domicilio
                     </p>
                     <h1
                         className="text-6xl md:text-8xl font-black text-white mb-6 leading-none tracking-tight"
@@ -26,8 +32,8 @@ export default function Home() {
                     >
                         bajo cero
                     </h1>
-                    <p className="text-white/60 text-base md:text-lg mb-10 max-w-sm leading-relaxed">
-                        Pureza desde las alturas de Bolivia. Directa a tu puerta.
+                    <p className="text-white/60 text-base md:text-lg mb-10 max-w-md leading-relaxed">
+                        Pureza desde las alturas de Bolivia. Agua purificada de alta calidad directa a tu hogar u oficina en Sucre y Santa Cruz.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3">
                         <Link href="/catalogo" className="glass px-7 py-3 rounded-full text-white text-sm font-semibold hover:bg-white/15 transition-all duration-300">
@@ -117,7 +123,7 @@ export default function Home() {
 
                 <div style={{ maxWidth: '960px', margin: '0 auto', position: 'relative' }}>
                     <p style={{ fontSize: '10px', color: 'rgba(168,212,224,0.4)', letterSpacing: '4px', textTransform: 'uppercase', textAlign: 'center', marginBottom: '12px' }}>
-                        Por qué elegirnos
+                        Agua Purificada de Mesa en Sucre y Santa Cruz
                     </p>
                     <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: 900, color: 'white', textAlign: 'center', marginBottom: '48px' }}>
                         Calidad que se siente
@@ -125,9 +131,9 @@ export default function Home() {
 
                     <div className="grid-responsive-3col">
                         {[
-                            { icon: '❄️', title: 'Pureza total', desc: 'Filtración en múltiples etapas. El 99.9% de impurezas eliminadas.' },
-                            { icon: '🚚', title: 'Entrega en 24h', desc: 'Recibe tu pedido al día siguiente en Sucre o Santa Cruz.' },
-                            { icon: '💧', title: 'Agua viva', desc: 'Extraída de fuentes naturales de las alturas bolivianas.' },
+                            { icon: '❄️', title: 'Pureza Garantizada', desc: 'Agua purificada mediante microfiltración y ósmosis inversa. El 99.9% de las impurezas eliminadas.' },
+                            { icon: '🚚', title: 'Envío Gratis en 24h', desc: 'Distribución y reparto a domicilio rápido en Sucre y Santa Cruz de la Sierra sin costo adicional.' },
+                            { icon: '💧', title: 'Agua de Mesa Premium', desc: 'Ideal para hidratación diaria en hogares y oficinas. Un sabor ligero y pureza que cuida tu salud.' },
                         ].map((item) => (
                             <div key={item.title} style={{
                                 background: 'rgba(123,184,200,0.05)',

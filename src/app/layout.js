@@ -7,8 +7,8 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-display' })
 
 export const metadata = {
-  title: 'Bajo Cero — Agua Premium',
-  description: 'Agua purificada premium con entrega a domicilio en Bolivia',
+  title: 'Bajo Cero',
+  description: 'Agua purificada con entrega a domicilio en Bolivia',
 }
 
 export default function RootLayout({ children }) {
