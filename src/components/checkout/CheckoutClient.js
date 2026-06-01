@@ -63,13 +63,55 @@ export default function CheckoutClient() {
   const [apellido, setApellido] = useState(user?.apellido || '')
   const [telefono, setTelefono] = useState(user?.telefono || '')
 
-  const initialDireccion = user?.direccion ? user.direccion.split(' (Zona:')[0] : ''
-  const initialZona = user?.direccion && user.direccion.includes(' (Zona: ') 
-    ? user.direccion.split(' (Zona: ')[1].replace(')', '') 
-    : 'Sopocachi'
+  const ZONAS_CIUDAD = {
+    'Sucre': [
+      'Centro Histórico',
+      'Zona Alta (La Madona / Santa Ana)',
+      'Zona Garcilazo',
+      'El Rollo',
+      'Barrio Petrolero',
+      'Zona Cementerio',
+      'Zona Mesa Verde',
+      'Otra Zona'
+    ],
+    'Santa Cruz': [
+      'Equipetrol',
+      'Las Palmas',
+      'Centro / Casco Viejo',
+      'Urbarí',
+      'Zona Norte (Radial 26 / Av. Banzer)',
+      'Zona Sur',
+      'Zona Este (Plan 3000 / Av. Virgen de Cotoca)',
+      'Zona Oeste (Doble Vía La Guardia)',
+      'Otra Zona'
+    ]
+  }
 
-  const [direccion, setDireccion] = useState(initialDireccion)
-  const [zona, setZona] = useState(initialZona)
+  const parseDireccion = (fullDir) => {
+    if (!fullDir) return { dir: '', city: 'Sucre', zone: 'Centro Histórico' }
+    if (fullDir.includes('(Ciudad: ') && fullDir.includes(', Zona: ')) {
+      const parts = fullDir.split(' (Ciudad: ')
+      const dir = parts[0]
+      const rightPart = parts[1].replace(')', '')
+      const subParts = rightPart.split(', Zona: ')
+      return { dir, city: subParts[0], zone: subParts[1] }
+    }
+    if (fullDir.includes(' (Zona: ')) {
+      const parts = fullDir.split(' (Zona: ')
+      return { dir: parts[0], city: 'Sucre', zone: parts[1].replace(')', '') }
+    }
+    return { dir: fullDir, city: 'Sucre', zone: 'Centro Histórico' }
+  }
+
+  const parsed = parseDireccion(user?.direccion)
+  const [direccion, setDireccion] = useState(parsed.dir)
+  const [ciudad, setCiudad] = useState(parsed.city)
+  const [zona, setZona] = useState(parsed.zone)
+
+  const handleCiudadChange = (newCity) => {
+    setCiudad(newCity)
+    setZona(ZONAS_CIUDAD[newCity][0])
+  }
   const [requiereFactura, setRequiereFactura] = useState(false)
   const [nombreFactura, setNombreFactura] = useState('')
   const [nitFactura, setNitFactura] = useState('')
@@ -104,7 +146,7 @@ export default function CheckoutClient() {
     const toastId = toast.loading('Procesando tu pedido...')
     try {
       const cleanCi = ci.trim()
-      const cleanDireccion = `${direccion.trim()} (Zona: ${zona})`
+      const cleanDireccion = `${direccion.trim()} (Ciudad: ${ciudad}, Zona: ${zona})`
       const { data: clienteExistente } = await supabase.from('cliente').select('*').eq('ci', cleanCi).maybeSingle()
       if (clienteExistente) {
         await supabase.from('cliente').update({ nombre: nombre.trim(), apellido: apellido.trim(), telefono: telefono.trim(), direccion: cleanDireccion }).eq('ci', cleanCi)
@@ -135,6 +177,101 @@ export default function CheckoutClient() {
     } finally {
       setCargando(false)
     }
+  }
+
+  if (!user) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        paddingTop: '120px',
+        paddingBottom: '80px',
+        background: '#07100F',
+        color: 'white',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        {/* Glows */}
+        <div style={{ position: 'absolute', top: '-100px', left: '30%', width: '500px', height: '400px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(0,74,143,0.12) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-100px', right: '30%', width: '400px', height: '300px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(220,120,40,0.06) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
+
+        <div style={{ width: '100%', maxWidth: '500px', padding: '0 24px', position: 'relative', zIndex: 10, textAlign: 'center' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '28px',
+              padding: '40px 32px',
+            }}
+          >
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <ShieldCheck size={28} color="var(--color-bc-orange)" />
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 900, marginBottom: '12px' }}>Identificación de Cliente</h2>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, marginBottom: '32px' }}>
+              Para confirmar tu pedido y gestionar tus entregas de forma segura en Bajo Cero, necesitas registrarte o iniciar sesión.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Link
+                href="/auth/login?redirect=/checkout"
+                style={{
+                  height: '46px',
+                  borderRadius: '999px',
+                  background: 'var(--color-bc-orange)',
+                  color: 'white',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  letterSpacing: '1px',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 8px 24px rgba(220,120,40,0.2)'
+                }}
+                className="hover:opacity-90 active:scale-98"
+              >
+                Iniciar Sesión
+              </Link>
+              <Link
+                href="/auth/registro?redirect=/checkout"
+                style={{
+                  height: '46px',
+                  borderRadius: '999px',
+                  background: 'rgba(255,255,255,0.08)',
+                  color: 'white',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  letterSpacing: '1px',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  transition: 'all 0.2s',
+                }}
+                className="hover:bg-white/12 active:scale-98"
+              >
+                Crear una Cuenta
+              </Link>
+            </div>
+
+            <div style={{ marginTop: '24px' }}>
+              <Link href="/carrito" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', fontWeight: 600 }} className="hover:text-white transition-colors">
+                ← Volver al Carrito
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -200,9 +337,18 @@ export default function CheckoutClient() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={labelStyle}>Ciudad de Entrega *</label>
+                  <select value={ciudad} onChange={(e) => handleCiudadChange(e.target.value)} style={{ ...inputStyle, cursor: 'pointer', appearance: 'none', backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`, backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}>
+                    {['Sucre', 'Santa Cruz'].map(c => (
+                      <option key={c} value={c} style={{ background: '#0C1E26' }}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={labelStyle}>Zona de Entrega *</label>
                   <select value={zona} onChange={(e) => setZona(e.target.value)} style={{ ...inputStyle, cursor: 'pointer', appearance: 'none', backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`, backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}>
-                    {['Sopocachi', 'Zona Sur (Calacoto, San Miguel)', 'Centro (Prado, San Pedro)', 'Miraflores', 'El Alto', 'Mallasa / Mallasilla', 'Otra Zona'].map(z => (
+                    {(ZONAS_CIUDAD[ciudad] || []).map(z => (
                       <option key={z} value={z} style={{ background: '#0C1E26' }}>{z}</option>
                     ))}
                   </select>

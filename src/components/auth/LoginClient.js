@@ -39,7 +39,8 @@ export default function LoginClient() {
     const exito = await login(ci, contrasena)
     if (exito) {
       toast.success('Sesión iniciada correctamente')
-      router.push('/pedidos')
+      const target = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('redirect') || '/pedidos' : '/pedidos'
+      router.push(target)
     }
   }
 
@@ -155,7 +156,7 @@ export default function LoginClient() {
           {/* Enlace a Registro */}
           <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>
             ¿No tienes contraseña configurada?{' '}
-            <Link href="/auth/registro" style={{ color: 'var(--color-bc-orange)', fontWeight: 600, textDecoration: 'none' }}>
+            <Link href={`/auth/registro${typeof window !== 'undefined' ? window.location.search : ''}`} style={{ color: 'var(--color-bc-orange)', fontWeight: 600, textDecoration: 'none' }}>
               Regístrate aquí
             </Link>
           </div>

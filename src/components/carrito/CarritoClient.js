@@ -256,7 +256,7 @@ export default function CarritoClient() {
                     </div>
                   )}
                   <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.5)' }}>
-                    <span>Envío (La Paz)</span>
+                    <span>Envío (Sucre / Santa Cruz)</span>
                     <span style={{ color: '#34d399', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase' }}>Gratis</span>
                   </div>
                 </div>

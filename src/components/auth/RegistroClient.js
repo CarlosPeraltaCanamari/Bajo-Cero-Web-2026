@@ -51,7 +51,8 @@ export default function RegistroClient() {
 
     if (exito) {
       toast.success('¡Registro exitoso! Iniciando sesión...')
-      router.push('/pedidos')
+      const target = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('redirect') || '/pedidos' : '/pedidos'
+      router.push(target)
     }
   }
 
@@ -191,7 +192,7 @@ export default function RegistroClient() {
           {/* Enlace a Login */}
           <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>
             ¿Ya tienes una cuenta?{' '}
-            <Link href="/auth/login" style={{ color: 'var(--color-bc-orange)', fontWeight: 600, textDecoration: 'none' }}>
+            <Link href={`/auth/login${typeof window !== 'undefined' ? window.location.search : ''}`} style={{ color: 'var(--color-bc-orange)', fontWeight: 600, textDecoration: 'none' }}>
               Inicia sesión aquí
             </Link>
           </div>
