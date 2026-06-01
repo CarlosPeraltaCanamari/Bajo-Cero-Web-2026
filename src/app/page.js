@@ -9,16 +9,17 @@ export const metadata = {
 
 export default function Home() {
     return (
-        <main style={{ background: '#07100F' }}>
+        <main style={{ background: '#020b18' }}>
 
             {/* HERO */}
             <section className="relative h-screen flex items-center justify-center overflow-hidden">
-                <Image
-                    src="/hero.png"
-                    alt="Bajo Cero - Agua Purificada Premium en Bolivia"
-                    fill
-                    className="object-cover object-center scale-105"
-                    priority
+                <video
+                    src="/SVG BajoCero/bajocerovideo.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover object-center scale-105"
                 />
                 <div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/20 to-black/80" />
 
@@ -54,7 +55,7 @@ export default function Home() {
             {/* STATS — fondo azul agua oscuro */}
             <section style={{
                 position: 'relative',
-                background: 'linear-gradient(180deg, #07100F 0%, #0C1E26 100%)',
+                background: 'linear-gradient(180deg, #020b18 0%, #081a30 100%)',
             }} className="section-py-stats container-responsive overflow-hidden">
                 {/* Glow azul agua */}
                 <div style={{
@@ -98,7 +99,7 @@ export default function Home() {
             {/* BENEFICIOS — fondo con tono arena/rosado */}
             <section style={{
                 position: 'relative',
-                background: 'linear-gradient(180deg, #0C1E26 0%, #121418 50%, #0E1519 100%)',
+                background: 'linear-gradient(180deg, #081a30 0%, #07101b 50%, #040c16 100%)',
             }} className="section-py-large container-responsive overflow-hidden">
                 {/* Glow rosado atardecer en esquina */}
                 <div style={{
@@ -157,7 +158,7 @@ export default function Home() {
             {/* CTA MAYORISTA — tono arena cálido */}
             <section style={{
                 position: 'relative',
-                background: 'linear-gradient(180deg, #0E1519 0%, #111210 100%)',
+                background: 'linear-gradient(180deg, #040c16 0%, #02070f 100%)',
             }} className="section-py-large container-responsive overflow-hidden">
                 {/* Glow arena/rosado */}
                 <div style={{

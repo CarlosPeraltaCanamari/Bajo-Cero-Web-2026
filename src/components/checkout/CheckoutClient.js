@@ -124,7 +124,7 @@ export default function CheckoutClient() {
       const qrText = `Agua Bajo Cero - Pedido por ${total.toFixed(2)} Bs. (CI: ${ci || 'Normal'})`
       QRCode.toCanvas(canvasRef.current, qrText, {
         width: 180, margin: 1,
-        color: { dark: '#07100F', light: '#FFFFFF' }
+        color: { dark: '#020b18', light: '#FFFFFF' }
       }, (error) => { if (error) console.error(error) })
     }
   }, [metodoPago, total, ci])
@@ -185,7 +185,7 @@ export default function CheckoutClient() {
         minHeight: '100vh',
         paddingTop: '120px',
         paddingBottom: '80px',
-        background: '#07100F',
+        background: '#020b18',
         color: 'white',
         position: 'relative',
         overflow: 'hidden',
@@ -279,7 +279,7 @@ export default function CheckoutClient() {
       minHeight: '100vh',
       paddingTop: '120px',   /* espacio generoso bajo el navbar */
       paddingBottom: '80px',
-      background: '#07100F',
+      background: '#020b18',
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
@@ -340,7 +340,7 @@ export default function CheckoutClient() {
                   <label style={labelStyle}>Ciudad de Entrega *</label>
                   <select value={ciudad} onChange={(e) => handleCiudadChange(e.target.value)} style={{ ...inputStyle, cursor: 'pointer', appearance: 'none', backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`, backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}>
                     {['Sucre', 'Santa Cruz'].map(c => (
-                      <option key={c} value={c} style={{ background: '#0C1E26' }}>{c}</option>
+                      <option key={c} value={c} style={{ background: '#081a30' }}>{c}</option>
                     ))}
                   </select>
                 </div>
@@ -349,7 +349,7 @@ export default function CheckoutClient() {
                   <label style={labelStyle}>Zona de Entrega *</label>
                   <select value={zona} onChange={(e) => setZona(e.target.value)} style={{ ...inputStyle, cursor: 'pointer', appearance: 'none', backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`, backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}>
                     {(ZONAS_CIUDAD[ciudad] || []).map(z => (
-                      <option key={z} value={z} style={{ background: '#0C1E26' }}>{z}</option>
+                      <option key={z} value={z} style={{ background: '#081a30' }}>{z}</option>
                     ))}
                   </select>
                 </div>

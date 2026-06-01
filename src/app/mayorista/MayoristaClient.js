@@ -136,7 +136,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
       minHeight: '100vh',
       paddingTop: '100px',
       paddingBottom: '80px',
-      background: '#07100F',
+      background: '#020b18',
       position: 'relative',
       overflow: 'hidden',
     }}>
@@ -621,10 +621,10 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
                     fontSize: '13px', outline: 'none', cursor: 'pointer'
                   }}
                 >
-                  <option value="Menos de 24" style={{ background: '#0C1E26' }}>Menos de 24 unidades al mes</option>
-                  <option value="24-48" style={{ background: '#0C1E26' }}>Entre 24 y 48 unidades al mes</option>
-                  <option value="48-100" style={{ background: '#0C1E26' }}>Entre 48 y 100 unidades al mes</option>
-                  <option value="Más de 100" style={{ background: '#0C1E26' }}>Más de 100 unidades al mes (Gran Distribuidor)</option>
+                  <option value="Menos de 24" style={{ background: '#081a30' }}>Menos de 24 unidades al mes</option>
+                  <option value="24-48" style={{ background: '#081a30' }}>Entre 24 y 48 unidades al mes</option>
+                  <option value="48-100" style={{ background: '#081a30' }}>Entre 48 y 100 unidades al mes</option>
+                  <option value="Más de 100" style={{ background: '#081a30' }}>Más de 100 unidades al mes (Gran Distribuidor)</option>
                 </select>
               </div>
 

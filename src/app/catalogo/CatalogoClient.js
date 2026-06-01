@@ -52,7 +52,7 @@ export default function CatalogoClient({ productosIniciales = [] }) {
       {
         duration: 3000,
         style: {
-          background: '#0C1E26', color: '#fff',
+          background: '#081a30', color: '#fff',
           border: '1px solid rgba(168,212,224,0.2)', borderRadius: '16px',
         },
         iconTheme: { primary: '#DC7828', secondary: '#fff' },
@@ -66,7 +66,7 @@ export default function CatalogoClient({ productosIniciales = [] }) {
       minHeight: '100vh',
       paddingTop: '100px',   /* espacio bajo el navbar fijo */
       paddingBottom: '80px',
-      background: '#07100F',
+      background: '#020b18',
       position: 'relative',
       overflow: 'hidden',
     }}>
@@ -145,9 +145,9 @@ export default function CatalogoClient({ productosIniciales = [] }) {
                 fontSize: '14px', outline: 'none', appearance: 'none', cursor: 'pointer',
               }}
             >
-              <option value="defecto" style={{ background: '#0C1E26' }}>Relevancia</option>
-              <option value="precio-asc" style={{ background: '#0C1E26' }}>Precio: Menor a Mayor</option>
-              <option value="precio-desc" style={{ background: '#0C1E26' }}>Precio: Mayor a Menor</option>
+              <option value="defecto" style={{ background: '#081a30' }}>Relevancia</option>
+              <option value="precio-asc" style={{ background: '#081a30' }}>Precio: Menor a Mayor</option>
+              <option value="precio-desc" style={{ background: '#081a30' }}>Precio: Mayor a Menor</option>
             </select>
           </div>
         </motion.div>

@@ -336,7 +336,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
                         <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 700 }}>Cat: {prod.categoria}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 text-right">
+                    <div className="flex items-center gap-4 sm:gap-6 shrink-0 text-right">
                       <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>{d.cantidad} x {d.precio_unitario.toFixed(2)} Bs.</span>
                       <span style={{ fontWeight: 700, color: 'white', textAlign: 'right', minWidth: '70px' }}>{(d.cantidad * d.precio_unitario).toFixed(2)} Bs.</span>
                     </div>
@@ -613,7 +613,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             style={{
-              background: '#0C1E26',
+              background: '#081a30',
               border: '1px solid rgba(168,212,224,0.15)',
               borderRadius: '24px',
               padding: '32px',

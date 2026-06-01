@@ -14,7 +14,7 @@ export default async function PedidoDetallePage({ params }) {
       minHeight: '100vh',
       paddingTop: '110px',
       paddingBottom: '80px',
-      background: '#07100F',
+      background: '#020b18',
       position: 'relative',
       overflow: 'hidden',
     }}>

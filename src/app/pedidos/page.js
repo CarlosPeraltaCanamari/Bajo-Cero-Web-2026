@@ -94,7 +94,7 @@ export default function PedidosHistoricoPage() {
       minHeight: '100vh',
       paddingTop: '120px',
       paddingBottom: '80px',
-      background: '#07100F',
+      background: '#020b18',
       position: 'relative',
       overflow: 'hidden',
       color: 'white'

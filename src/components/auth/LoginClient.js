@@ -49,7 +49,7 @@ export default function LoginClient() {
       minHeight: '100vh',
       paddingTop: '120px',
       paddingBottom: '80px',
-      background: '#07100F',
+      background: '#020b18',
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
