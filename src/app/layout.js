@@ -10,9 +10,9 @@ export const metadata = {
   title: 'Bajo Cero',
   description: 'Agua purificada con entrega a domicilio en Bolivia',
   icons: {
-    icon: '/bajocero.png',
-    shortcut: '/bajocero.png',
-    apple: '/bajocero.png',
+    icon: '/bajocerologo.png',
+    shortcut: '/bajocerologo.png',
+    apple: '/bajocerologo.png',
   },
 }
 
