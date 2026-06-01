@@ -20,8 +20,8 @@ export default function Footer() {
                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 70%, transparent)',
             }} />
 
-            <div style={{ maxWidth: '960px', margin: '0 auto', padding: '56px 48px 48px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '48px' }}>
+            <div style={{ maxWidth: '960px', margin: '0 auto' }} className="container-responsive footer-padding">
+                <div className="grid-responsive-3col">
 
                     {/* Brand */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -37,7 +37,7 @@ export default function Footer() {
                                 background: '#22c55e', boxShadow: '0 0 6px #22c55e', flexShrink: 0
                             }} />
                             <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)' }}>
-                                Entregando en La Paz
+                                Entregando en Sucre y Santa Cruz
                             </span>
                         </div>
                     </div>
@@ -90,7 +90,7 @@ export default function Footer() {
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                 <circle cx="12" cy="10" r="3" />
                             </svg>
-                            La Paz, Bolivia
+                            Sucre / Santa Cruz, Bolivia
                         </span>
                     </div>
 
@@ -102,7 +102,7 @@ export default function Footer() {
                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent)',
             }} />
 
-            <div style={{ maxWidth: '960px', margin: '0 auto', padding: '16px 48px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ maxWidth: '960px', margin: '0 auto' }} className="container-responsive footer-bottom-padding flex flex-col md:flex-row justify-between items-center gap-2">
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.18)' }}>© {year} Bajo Cero®</p>
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.18)' }}>Hecho con ❄️ en Bolivia</p>
             </div>

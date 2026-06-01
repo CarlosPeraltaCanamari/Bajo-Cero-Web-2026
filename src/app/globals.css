@@ -89,3 +89,171 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(0, 74, 143, 0.4);
 }
+
+/* --- CLASES RESPONSIVAS PARA MOBILE --- */
+
+/* Contenedores responsivos */
+.container-responsive {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+/* Relleno vertical de secciones */
+.section-py-stats {
+  padding-top: 48px !important;
+  padding-bottom: 48px !important;
+}
+@media (min-width: 768px) {
+  .section-py-stats {
+    padding-top: 64px !important;
+    padding-bottom: 64px !important;
+  }
+}
+
+.section-py-large {
+  padding-top: 60px !important;
+  padding-bottom: 60px !important;
+}
+@media (min-width: 768px) {
+  .section-py-large {
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+  }
+}
+
+/* Relleno de tarjetas y cajas */
+.card-py-cta {
+  padding: 40px 24px !important;
+}
+@media (min-width: 768px) {
+  .card-py-cta {
+    padding: 56px 48px !important;
+  }
+}
+
+.stats-item-padding {
+  padding: 24px 16px !important;
+}
+@media (min-width: 768px) {
+  .stats-item-padding {
+    padding: 32px 24px !important;
+  }
+}
+
+.card-benefit-padding {
+  padding: 24px 20px !important;
+}
+@media (min-width: 768px) {
+  .card-benefit-padding {
+    padding: 32px 28px !important;
+  }
+}
+
+.footer-padding {
+  padding: 40px 20px !important;
+}
+@media (min-width: 768px) {
+  .footer-padding {
+    padding: 56px 48px !important;
+  }
+}
+
+.footer-bottom-padding {
+  padding: 16px 20px !important;
+}
+@media (min-width: 768px) {
+  .footer-bottom-padding {
+    padding: 16px 48px !important;
+  }
+}
+
+/* Grillas responsivas */
+.grid-responsive-2col {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+}
+@media (min-width: 768px) {
+  .grid-responsive-2col {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+.grid-responsive-3col {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+}
+@media (min-width: 640px) {
+  .grid-responsive-3col {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (min-width: 768px) {
+  .grid-responsive-3col {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 48px !important;
+  }
+}
+
+.grid-responsive-4col {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+}
+@media (min-width: 768px) {
+  .grid-responsive-4col {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 0px !important;
+  }
+}
+
+.grid-responsive-split-mayorista {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 40px !important;
+}
+@media (min-width: 1024px) {
+  .grid-responsive-split-mayorista {
+    grid-template-columns: 1.2fr 1fr !important;
+  }
+}
+
+.grid-responsive-split-checkout {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 28px !important;
+}
+@media (min-width: 1024px) {
+  .grid-responsive-split-checkout {
+    grid-template-columns: 1fr 360px !important;
+  }
+}
+
+.grid-responsive-split-carrito {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 28px !important;
+}
+@media (min-width: 1024px) {
+  .grid-responsive-split-carrito {
+    grid-template-columns: 1fr 340px !important;
+  }
+}
+
+.grid-responsive-detalle-pedido {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 28px !important;
+}
+@media (min-width: 1024px) {
+  .grid-responsive-detalle-pedido {
+    grid-template-columns: repeat(12, 1fr) !important;
+  }
+}

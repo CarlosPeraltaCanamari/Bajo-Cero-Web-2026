@@ -162,7 +162,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
         filter: 'blur(55px)', pointerEvents: 'none',
       }} />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 10 }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 10 }} className="px-4 sm:px-10">
 
         {/* ── SECCIÓN HERO ── */}
         <div style={{ textAlign: 'center', marginBottom: '72px', maxWidth: '750px', margin: '0 auto 72px' }}>
@@ -229,11 +229,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
             <div style={{ width: '40px', height: '1.5px', background: 'var(--color-bc-orange)', margin: '0 auto' }} />
           </div>
 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
-            gap: '20px' 
-          }} className="max-md:grid-cols-2 max-sm:grid-cols-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             {[
               {
                 name: 'HIPERMAXI',
@@ -303,12 +299,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
         </motion.div>
 
         {/* ── SECCIÓN CENTRAL: CALCULADORA Y FORMULARIO ── */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '1.2fr 1fr', 
-          gap: '40px',
-          alignItems: 'stretch'
-        }} className="max-lg:grid-columns-1 max-lg:flex max-lg:flex-col">
+        <div style={{ alignItems: 'stretch' }} className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10">
 
           {/* CALCULADORA (Izquierda) */}
           <motion.div
@@ -349,7 +340,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
                 <label style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.4)', marginBottom: '8px', display: 'block' }}>
                   Selecciona el Producto
                 </label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px' }} className="sm:grid-cols-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {PRODUCTOS_CALCULADORA.map((p) => {
                     const esSeleccionado = productoSeleccionado.id === p.id
                     return (
@@ -571,7 +562,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="max-sm:grid-cols-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
                     Teléfono / Celular *
@@ -690,7 +681,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
 
         {/* ── SECCIÓN BENEFICIOS ADICIONALES ── */}
         <div style={{ marginTop: '96px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }} className="max-md:grid-cols-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               {
                 icon: <Truck size={24} color="var(--color-bc-orange)" />,

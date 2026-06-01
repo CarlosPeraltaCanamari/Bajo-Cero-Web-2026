@@ -226,7 +226,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
       `}} />
 
       {/* Contenido en Pantalla */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '28px', color: 'white', padding: '0' }} className="lg:grid-cols-12 no-print">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 no-print text-white p-0">
 
         {/* Columna Izquierda: Mensaje y Estado */}
         <div className="lg:col-span-8" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -322,7 +322,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
               {detalles.map((d) => {
                 const prod = d.producto || {}
                 return (
-                  <div key={d.producto_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', fontSize: '13px', padding: '4px 0' }}>
+                  <div key={d.producto_id} className="flex justify-between items-center gap-4 text-xs sm:text-sm py-1 border-b border-white/5 last:border-b-0 sm:border-b-0">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                         {prod.url ? (
@@ -336,7 +336,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
                         <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 700 }}>Cat: {prod.categoria}</span>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                    <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 text-right">
                       <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>{d.cantidad} x {d.precio_unitario.toFixed(2)} Bs.</span>
                       <span style={{ fontWeight: 700, color: 'white', textAlign: 'right', minWidth: '70px' }}>{(d.cantidad * d.precio_unitario).toFixed(2)} Bs.</span>
                     </div>

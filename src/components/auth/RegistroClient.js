@@ -103,7 +103,7 @@ export default function RegistroClient() {
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               {/* CI */}
               <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '2px' }}>
                 <label style={labelStyle}>CI / Documento de Identidad *</label>

@@ -57,10 +57,10 @@ export default function CarritoClient() {
       <div style={{ position: 'absolute', top: '-100px', right: '10%', width: '500px', height: '400px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(0,74,143,0.15) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '-50px', left: '5%', width: '500px', height: '400px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(220,120,40,0.06) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 10 }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 10 }} className="px-4 sm:px-10">
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '40px' }}>
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-10">
           <div>
             <Link href="/catalogo" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.4)', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', textDecoration: 'none', marginBottom: '12px' }}>
               <ArrowLeft size={13} /> Volver al catálogo
@@ -75,8 +75,8 @@ export default function CarritoClient() {
               letterSpacing: '1px', textTransform: 'uppercase',
               border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px',
               padding: '8px 16px', background: 'rgba(255,255,255,0.04)',
-              cursor: 'pointer', transition: 'all 0.2s', marginTop: '32px',
-            }}>
+              cursor: 'pointer', transition: 'all 0.2s'
+            }} className="mt-2 sm:mt-8 self-start sm:self-auto hover:bg-white/10 hover:text-white">
               Vaciar carrito
             </button>
           )}
@@ -112,7 +112,7 @@ export default function CarritoClient() {
 
         ) : (
           /* Layout dos columnas */
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '28px', alignItems: 'start' }}>
+          <div style={{ alignItems: 'start' }} className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-7">
 
             {/* Lista productos */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -125,78 +125,75 @@ export default function CarritoClient() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -40 }}
                     transition={{ duration: 0.2 }}
-                    style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                      borderRadius: '20px',
-                      padding: '20px 24px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '20px',
-                      transition: 'border-color 0.2s',
-                    }}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 border border-white/8 bg-white/4 rounded-2xl transition-colors duration-200 hover:border-white/12"
                   >
-                    {/* Imagen */}
-                    <div style={{
-                      width: '64px', height: '64px', borderRadius: '14px',
-                      background: item.imagen ? '#F4F8FC' : 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      flexShrink: 0, overflow: 'hidden',
-                    }}>
-                      {item.imagen ? (
-                        <img src={item.imagen} alt={item.nombre} style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
-                      ) : (
-                        <ShoppingCart size={22} color="rgba(255,255,255,0.2)" />
-                      )}
+                    {/* Bloque info: Imagen e Info de Producto */}
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                      {/* Imagen */}
+                      <div style={{
+                        width: '64px', height: '64px', borderRadius: '14px',
+                        background: item.imagen ? '#F4F8FC' : 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexShrink: 0, overflow: 'hidden',
+                      }}>
+                        {item.imagen ? (
+                          <img src={item.imagen} alt={item.nombre} style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
+                        ) : (
+                          <ShoppingCart size={22} color="rgba(255,255,255,0.2)" />
+                        )}
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <h3 style={{ fontWeight: 700, fontSize: '15px', color: 'white', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {item.nombre}
+                        </h3>
+                        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
+                          Precio unitario: {item.precio.toFixed(2)} Bs.
+                        </p>
+                      </div>
                     </div>
 
-                    {/* Info */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <h3 style={{ fontWeight: 700, fontSize: '15px', color: 'white', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {item.nombre}
-                      </h3>
-                      <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
-                        Precio unitario: {item.precio.toFixed(2)} Bs.
-                      </p>
-                    </div>
+                    {/* Bloque acciones: Cantidad, Total, Eliminar */}
+                    <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 pt-3 sm:pt-0 border-t border-white/5 sm:border-t-0">
+                      {/* Cantidad */}
+                      <div style={{
+                        display: 'flex', alignItems: 'center', gap: '4px',
+                        background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '999px', padding: '4px',
+                      }}>
+                        <button onClick={() => updateQuantity(item.producto_id, item.cantidad - 1)} style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', transition: 'all 0.15s' }}>
+                          <Minus size={12} />
+                        </button>
+                        <span style={{ width: '28px', textAlign: 'center', fontWeight: 700, fontSize: '14px', color: 'white' }}>
+                          {item.cantidad}
+                        </span>
+                        <button onClick={() => updateQuantity(item.producto_id, item.cantidad + 1)} style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', transition: 'all 0.15s' }}>
+                          <Plus size={12} />
+                        </button>
+                      </div>
 
-                    {/* Cantidad */}
-                    <div style={{
-                      display: 'flex', alignItems: 'center', gap: '4px',
-                      background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: '999px', padding: '4px',
-                    }}>
-                      <button onClick={() => updateQuantity(item.producto_id, item.cantidad - 1)} style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', transition: 'all 0.15s' }}>
-                        <Minus size={12} />
+                      {/* Total item */}
+                      <div style={{ textAlign: 'right', minWidth: '72px' }}>
+                        <span style={{ fontWeight: 900, fontSize: '16px', color: 'white' }}>
+                          {(item.precio * item.cantidad).toFixed(2)}
+                        </span>
+                        <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginLeft: '3px', fontWeight: 700, textTransform: 'uppercase' }}>Bs.</span>
+                      </div>
+
+                      {/* Eliminar */}
+                      <button onClick={() => removeItem(item.producto_id)} style={{ width: '34px', height: '34px', borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.25)', transition: 'all 0.2s', flexShrink: 0 }} className="hover:text-rose-400">
+                        <Trash2 size={15} />
                       </button>
-                      <span style={{ width: '28px', textAlign: 'center', fontWeight: 700, fontSize: '14px', color: 'white' }}>
-                        {item.cantidad}
-                      </span>
-                      <button onClick={() => updateQuantity(item.producto_id, item.cantidad + 1)} style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', transition: 'all 0.15s' }}>
-                        <Plus size={12} />
-                      </button>
                     </div>
-
-                    {/* Total item */}
-                    <div style={{ textAlign: 'right', minWidth: '72px' }}>
-                      <span style={{ fontWeight: 900, fontSize: '16px', color: 'white' }}>
-                        {(item.precio * item.cantidad).toFixed(2)}
-                      </span>
-                      <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginLeft: '3px', fontWeight: 700, textTransform: 'uppercase' }}>Bs.</span>
-                    </div>
-
-                    {/* Eliminar */}
-                    <button onClick={() => removeItem(item.producto_id)} style={{ width: '34px', height: '34px', borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.25)', transition: 'all 0.2s', flexShrink: 0 }}>
-                      <Trash2 size={15} />
-                    </button>
                   </motion.div>
                 ))}
               </AnimatePresence>
             </div>
 
             {/* Resumen sticky */}
-            <div style={{ position: 'sticky', top: '96px' }}>
+            <div className="lg:sticky lg:top-24">
               <div style={{
                 background: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,255,255,0.08)',
@@ -284,7 +281,7 @@ export default function CarritoClient() {
                 </button>
 
                 <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', textAlign: 'center', lineHeight: 1.5, margin: 0 }}>
-                  Entrega en 24h en La Paz. Pago al recibir o por QR.
+                  Entrega en 24h en Sucre o Santa Cruz. Pago al recibir o por QR.
                 </p>
               </div>
             </div>

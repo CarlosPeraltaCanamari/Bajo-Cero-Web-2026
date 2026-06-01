@@ -72,7 +72,7 @@ export default function EnviosPage() {
         filter: 'blur(50px)', pointerEvents: 'none',
       }} />
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 10 }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 10 }} className="px-4 sm:px-10">
         
         {/* ── ENCABEZADO HERO ── */}
         <div style={{ textAlign: 'center', marginBottom: '64px', maxWidth: '700px', margin: '0 auto 64px' }}>
@@ -130,13 +130,8 @@ export default function EnviosPage() {
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(2, 1fr)', 
-            gap: '32px',
-            marginBottom: '72px'
-          }} 
-          className="max-md:grid-cols-1"
+          style={{ marginBottom: '72px' }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
           {/* Sucre */}
           <motion.div 
@@ -159,7 +154,7 @@ export default function EnviosPage() {
             <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
             <div>
               <h4 style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px' }}>Zonas de Cobertura Activa:</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px' }} className="max-sm:grid-cols-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-x-4">
                 {coverageSucre.map((zone) => (
                   <div key={zone} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>
                     <div style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--color-bc-orange)' }} />
@@ -191,7 +186,7 @@ export default function EnviosPage() {
             <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
             <div>
               <h4 style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px' }}>Zonas de Cobertura Activa:</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px' }} className="max-sm:grid-cols-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-x-4">
                 {coverageSantaCruz.map((zone) => (
                   <div key={zone} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>
                     <div style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--color-bc-orange)' }} />
@@ -204,7 +199,7 @@ export default function EnviosPage() {
         </motion.div>
 
         {/* ── HORARIOS Y POLÍTICAS ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px', marginBottom: '72px', alignItems: 'stretch' }} className="max-md:grid-cols-1 max-md:flex max-md:flex-col">
+        <div style={{ marginBottom: '72px', alignItems: 'stretch' }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr] gap-10">
           
           {/* Horarios (Izquierda) */}
           <motion.div 
@@ -270,7 +265,7 @@ export default function EnviosPage() {
           <div style={{ width: '40px', height: '1.5px', background: 'var(--color-bc-orange)', margin: '0 auto' }} />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '80px' }} className="max-md:grid-cols-1">
+        <div style={{ marginBottom: '80px' }} className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             { step: '01', title: 'Pides en la Web', desc: 'Elige tu agua Bajo Cero y completa la dirección en el Checkout.' },
             { step: '02', title: 'Confirmación Express', desc: 'Te contactamos inmediatamente por WhatsApp para confirmar la fecha y el turno.' },

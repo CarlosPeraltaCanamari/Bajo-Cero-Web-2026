@@ -290,7 +290,7 @@ export default function CheckoutClient() {
       <div style={{ position: 'absolute', top: '-80px', left: '20%', width: '500px', height: '400px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(0,74,143,0.12) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '-80px', right: '15%', width: '400px', height: '300px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(220,120,40,0.06) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 10 }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 10 }} className="px-4 sm:px-10">
 
         {/* Header */}
         <div style={{ marginBottom: '40px' }}>
@@ -302,7 +302,7 @@ export default function CheckoutClient() {
           </h1>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '28px', alignItems: 'start' }}>
+        <form onSubmit={handleSubmit} style={{ alignItems: 'start' }} className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-7">
 
           {/* ── Izquierda ── */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -314,7 +314,7 @@ export default function CheckoutClient() {
                 Datos de Entrega
               </h2>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={labelStyle}>CI / Documento de Identidad *</label>
                   <input type="text" required placeholder="Ej. 7465086" value={ci} onChange={(e) => setCi(e.target.value)} style={inputStyle} />
@@ -375,7 +375,7 @@ export default function CheckoutClient() {
               </div>
               {requiereFactura && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
-                  style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', overflow: 'hidden' }}>
+                  style={{ overflow: 'hidden' }} className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     <label style={labelStyle}>NIT / CI para Factura *</label>
                     <input type="text" required={requiereFactura} placeholder="Ej. 754458" value={nitFactura} onChange={(e) => setNitFactura(e.target.value)} style={inputStyle} />
@@ -395,7 +395,7 @@ export default function CheckoutClient() {
                 Método de Pago
               </h2>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: metodoPago === 'QR' ? '20px' : '0' }}>
+              <div style={{ marginBottom: metodoPago === 'QR' ? '20px' : '0' }} className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {[
                   { key: 'Efectivo', icon: <DollarSign size={20} />, title: 'Efectivo al recibir', desc: 'Pagas al repartidor en tu puerta.' },
                   { key: 'QR', icon: <QrCode size={20} />, title: 'Pago Simple QR', desc: 'Escanea y transfiere desde tu app bancaria.' },
@@ -446,7 +446,7 @@ export default function CheckoutClient() {
           </div>
 
           {/* ── Derecha sticky ── */}
-          <div style={{ position: 'sticky', top: '96px' }}>
+          <div className="lg:sticky lg:top-24">
             <div style={{ ...sectionStyle, display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
