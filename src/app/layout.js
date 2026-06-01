@@ -9,6 +9,11 @@ const nunito = Nunito({ subsets: ['latin'], variable: '--font-display' })
 export const metadata = {
   title: 'Bajo Cero',
   description: 'Agua purificada con entrega a domicilio en Bolivia',
+  icons: {
+    icon: '/bajocero.png',
+    shortcut: '/bajocero.png',
+    apple: '/bajocero.png',
+  },
 }
 
 export default function RootLayout({ children }) {
