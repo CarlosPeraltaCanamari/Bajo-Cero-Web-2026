@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.2",
+    "animejs": "^4.4.1",
     "clsx": "^2.1.1",
     "credit-card-type": "^10.1.2",
     "date-fns": "^4.3.0",
