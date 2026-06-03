@@ -2,6 +2,7 @@ import { Inter, Nunito } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import CartDrawer from '@/components/carrito/CartDrawer'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-display' })
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="es">
       <body className={`${inter.variable} ${nunito.variable} flex flex-col min-h-screen`}>
         <Navbar />
+        <CartDrawer />
         <main className="flex-1">
           {children}
         </main>

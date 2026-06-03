@@ -5,6 +5,9 @@ const useCartStore = create(
   persist(
     (set, get) => ({
       items: [],
+      isCartDrawerOpen: false,
+      setCartDrawerOpen: (open) => set({ isCartDrawerOpen: open }),
+      toggleCartDrawer: () => set((state) => ({ isCartDrawerOpen: !state.isCartDrawerOpen })),
 
       addItem: (producto, cantidad = 1) => {
         const { items } = get()

@@ -6,9 +6,24 @@ export default function useCart() {
   const removeItem     = useCartStore((s) => s.removeItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const clearCart      = useCartStore((s) => s.clearCart)
+  const isCartDrawerOpen = useCartStore((s) => s.isCartDrawerOpen)
+  const setCartDrawerOpen = useCartStore((s) => s.setCartDrawerOpen)
+  const toggleCartDrawer = useCartStore((s) => s.toggleCartDrawer)
 
   const totalItems = items.reduce((acc, i) => acc + i.cantidad, 0)
   const subtotal   = items.reduce((acc, i) => acc + i.precio * i.cantidad, 0)
 
-  return { items, totalItems, subtotal, isEmpty: items.length === 0, addItem, removeItem, updateQuantity, clearCart }
+  return {
+    items,
+    totalItems,
+    subtotal,
+    isEmpty: items.length === 0,
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart,
+    isCartDrawerOpen,
+    setCartDrawerOpen,
+    toggleCartDrawer,
+  }
 }

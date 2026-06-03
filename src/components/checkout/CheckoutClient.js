@@ -10,6 +10,7 @@ import QRCode from 'qrcode'
 import useCart from '@/hooks/useCart'
 import useAuthStore from '@/store/authStore'
 import { createClient } from '@/lib/supabase/client'
+import GoogleMapPicker from './GoogleMapPicker'
 
 const inputStyle = {
   width: '100%', height: '44px', padding: '0 16px',
@@ -107,6 +108,8 @@ export default function CheckoutClient() {
   const [direccion, setDireccion] = useState(parsed.dir)
   const [ciudad, setCiudad] = useState(parsed.city)
   const [zona, setZona] = useState(parsed.zone)
+  const [latitud, setLatitud] = useState(user?.latitud || null)
+  const [longitud, setLongitud] = useState(user?.longitud || null)
 
   const handleCiudadChange = (newCity) => {
     setCiudad(newCity)
@@ -148,12 +151,48 @@ export default function CheckoutClient() {
       const cleanCi = ci.trim()
       const cleanDireccion = `${direccion.trim()} (Ciudad: ${ciudad}, Zona: ${zona})`
       const { data: clienteExistente } = await supabase.from('cliente').select('*').eq('ci', cleanCi).maybeSingle()
+      
+      let updatedUser = null
       if (clienteExistente) {
-        await supabase.from('cliente').update({ nombre: nombre.trim(), apellido: apellido.trim(), telefono: telefono.trim(), direccion: cleanDireccion }).eq('ci', cleanCi)
-      } else {
-        const { error } = await supabase.from('cliente').insert({ ci: cleanCi, nombre: nombre.trim(), apellido: apellido.trim(), telefono: telefono.trim(), direccion: cleanDireccion, habilitado_plan_pagos: false })
+        const { data, error } = await supabase
+          .from('cliente')
+          .update({ 
+            nombre: nombre.trim(), 
+            apellido: apellido.trim(), 
+            telefono: telefono.trim(), 
+            direccion: cleanDireccion,
+            latitud: latitud,
+            longitud: longitud
+          })
+          .eq('ci', cleanCi)
+          .select()
+          .single()
         if (error) throw new Error(error.message)
+        updatedUser = data
+      } else {
+        const { data, error } = await supabase
+          .from('cliente')
+          .insert({ 
+            ci: cleanCi, 
+            nombre: nombre.trim(), 
+            apellido: apellido.trim(), 
+            telefono: telefono.trim(), 
+            direccion: cleanDireccion, 
+            habilitado_plan_pagos: false,
+            latitud: latitud,
+            longitud: longitud
+          })
+          .select()
+          .single()
+        if (error) throw new Error(error.message)
+        updatedUser = data
       }
+      
+      // Actualizar el usuario local en useAuthStore si es el usuario logueado actualmente
+      if (updatedUser && user && user.ci === cleanCi) {
+        useAuthStore.getState().setUser(updatedUser)
+      }
+
       const fecha = new Date().toISOString().split('T')[0]
       const hora = new Date().toTimeString().split(' ')[0]
       const { data: nuevaVenta, error: errorVenta } = await supabase.from('venta').insert({ fecha, hora, tipo: 'Contado', estado: 'Pendiente', porcentaje_descuento: porcentajeDescuento, cliente_ci: cleanCi, direccion_entrega: cleanDireccion }).select().single()
@@ -357,6 +396,22 @@ export default function CheckoutClient() {
                 <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={labelStyle}>Dirección Exacta de Entrega *</label>
                   <input type="text" required placeholder="Ej. Calle 15 de Calacoto Nro. 120, Edificio Altura Dpto. 4B" value={direccion} onChange={(e) => setDireccion(e.target.value)} style={inputStyle} />
+                </div>
+
+                <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={labelStyle}>Fijar Ubicación Exacta en el Mapa</label>
+                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '4px' }}>
+                    Arrastra el marcador naranja o haz clic en tu posición exacta para que el repartidor llegue sin problemas.
+                  </span>
+                  <GoogleMapPicker
+                    lat={latitud}
+                    lng={longitud}
+                    defaultCity={ciudad}
+                    onChange={({ lat, lng }) => {
+                      setLatitud(lat)
+                      setLongitud(lng)
+                    }}
+                  />
                 </div>
               </div>
             </div>

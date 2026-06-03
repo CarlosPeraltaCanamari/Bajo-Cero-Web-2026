@@ -15,7 +15,7 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [profileModalOpen, setProfileModalOpen] = useState(false)
   const pathname = usePathname()
-  const { totalItems } = useCart()
+  const { totalItems, toggleCartDrawer } = useCart()
   const { user, logout } = useAuthStore()
   const dropdownRef = useRef(null)
 
@@ -88,10 +88,10 @@ export default function Navbar() {
           <div style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.2)', margin: '0 6px' }} />
 
           {/* Carrito */}
-          <Link
-            href="/carrito"
-            className="relative flex items-center justify-center rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-all"
-            style={{ width: '34px', height: '34px', flexShrink: 0 }}
+          <button
+            onClick={toggleCartDrawer}
+            className="relative flex items-center justify-center rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+            style={{ width: '34px', height: '34px', flexShrink: 0, background: 'transparent', border: 'none', padding: 0 }}
           >
             <ShoppingCart size={17} />
             {totalItems > 0 && (
@@ -99,7 +99,7 @@ export default function Navbar() {
                 {totalItems}
               </span>
             )}
-          </Link>
+          </button>
 
           {/* Usuario */}
           {user ? (
@@ -173,14 +173,18 @@ export default function Navbar() {
             </span>
           </Link>
           <div className="flex items-center gap-2">
-            <Link href="/carrito" className="relative text-white/70">
+            <button
+              onClick={toggleCartDrawer}
+              className="relative text-white/70 bg-transparent border-none cursor-pointer p-0"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
               <ShoppingCart size={20} />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-bc-orange text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
-            </Link>
+            </button>
             <button
               onClick={() => setMenuAbierto(!menuAbierto)}
               className="text-white/70 hover:text-white transition-colors ml-1"

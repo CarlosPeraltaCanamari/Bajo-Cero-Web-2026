@@ -7,7 +7,7 @@ import useCart from '@/hooks/useCart'
 import { Toaster, toast } from 'react-hot-toast'
 
 export default function CatalogoClient({ productosIniciales = [] }) {
-  const { addItem } = useCart()
+  const { addItem, setCartDrawerOpen } = useCart()
   const [busqueda, setBusqueda] = useState('')
   const [categoriaActiva, setCategoriaActiva] = useState('Todos')
   const [orden, setOrden] = useState('defecto')
@@ -44,6 +44,7 @@ export default function CatalogoClient({ productosIniciales = [] }) {
   const handleAgregarAlCarrito = (producto) => {
     const cantidad = obtenerCantidad(producto.id)
     addItem({ ...producto, imagen: producto.url || null }, cantidad)
+    setCartDrawerOpen(true)
     toast.success(
       <div className="flex flex-col">
         <span className="font-bold text-sm">¡Agregado al carrito!</span>
