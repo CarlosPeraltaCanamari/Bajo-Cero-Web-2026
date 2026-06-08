@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { ShoppingCart, User, Menu, X, LogOut, ClipboardList, Phone, MapPin } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { ShoppingCart, User, Menu, X, LogOut, ClipboardList, Phone, MapPin, Home, Droplet, Truck, Sparkles } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import useCart from '@/hooks/useCart'
@@ -15,6 +15,7 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [profileModalOpen, setProfileModalOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   const { totalItems, toggleCartDrawer } = useCart()
   const { user, logout } = useAuthStore()
   const dropdownRef = useRef(null)
@@ -40,6 +41,14 @@ export default function Navbar() {
     { href: '/catalogo', label: 'Catálogo' },
     { href: '/envios', label: 'Envíos' },
     { href: '/mayorista', label: 'Mayorista' },
+  ]
+
+  const mobileTabs = [
+    { href: '/', label: 'Inicio', icon: Home },
+    { href: '/catalogo', label: 'Catálogo', icon: Droplet },
+    { href: '/envios', label: 'Envíos', icon: Truck },
+    { href: '/mayorista', label: 'Mayorista', icon: Sparkles },
+    { href: '#profile', label: 'Cuenta', icon: User },
   ]
 
   return (
@@ -165,94 +174,128 @@ export default function Navbar() {
       </header>
 
       {/* NAVBAR MOBILE */}
-      <header className="fixed top-0 left-0 right-0 z-50 md:hidden">
-        <div className="glass-dark flex items-center justify-between px-4 py-3">
-          <Link href="/">
-            <span className="font-black text-lg text-white" style={{ fontFamily: 'var(--font-display)' }}>
-              bajo cero
-            </span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleCartDrawer}
-              className="relative text-white/70 bg-transparent border-none cursor-pointer p-0"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <ShoppingCart size={20} />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-bc-orange text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setMenuAbierto(!menuAbierto)}
-              className="text-white/70 hover:text-white transition-colors ml-1"
-            >
-              {menuAbierto ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
-        </div>
+      {/* TOP HEADER MOBILE (LOGO ONLY) */}
+      <div 
+        className="fixed top-0 left-0 right-0 z-40 md:hidden flex justify-between items-center px-4 py-3"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(2, 11, 24, 0.95), rgba(2, 11, 24, 0))',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+        }}
+      >
+        <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <Image
+            src="/bajocerologo.png"
+            alt="Bajo Cero"
+            width={70}
+            height={36}
+            style={{ objectFit: 'contain', height: '30px', width: 'auto' }}
+            priority
+          />
+        </Link>
+      </div>
 
-        {menuAbierto && (
-          <div className="glass-dark border-t border-white/10 px-4 py-3 flex flex-col gap-1">
-            {links.map(({ href, label }) => (
+      {/* BOTTOM TAB BAR MOBILE */}
+      <div 
+        className="fixed z-50 md:hidden flex items-center justify-center gap-3 px-4 w-full"
+        style={{
+          bottom: 'calc(16px + env(safe-area-inset-bottom, 0px))',
+        }}
+      >
+        {/* Main capsule */}
+        <nav
+          className="flex items-center justify-around flex-1 shadow-2xl relative"
+          style={{
+            height: '64px',
+            borderRadius: '20px',
+            background: 'rgba(8, 26, 48, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            padding: '0 4px',
+          }}
+        >
+          {mobileTabs.map((tab) => {
+            const isActive = pathname === tab.href || (tab.href === '#profile' && profileModalOpen)
+            const Icon = tab.icon
+
+            const handleTabClick = (e) => {
+              if (tab.href === '#profile') {
+                e.preventDefault()
+                if (user) {
+                  setProfileModalOpen(true)
+                } else {
+                  router.push('/auth/login')
+                }
+              }
+            }
+
+            return (
               <Link
-                key={href}
-                href={href}
-                onClick={() => setMenuAbierto(false)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${pathname === href
-                  ? 'bg-white/10 text-white'
-                  : 'text-white/60 hover:text-white hover:bg-white/10'
-                  }`}
+                key={tab.label}
+                href={tab.href}
+                onClick={handleTabClick}
+                className="flex flex-col items-center justify-center relative flex-1 h-full select-none cursor-pointer text-decoration-none"
               >
-                {label}
-              </Link>
-            ))}
-            <div className="h-px bg-white/10 my-1" />
-            {user ? (
-              <>
-                <button
-                  onClick={() => {
-                    setProfileModalOpen(true)
-                    setMenuAbierto(false)
+                {isActive && (
+                  <motion.div
+                    layoutId="activePill"
+                    className="absolute inset-x-1.5 inset-y-2 rounded-xl"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)',
+                      zIndex: 0,
+                    }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                
+                <div 
+                  className="flex flex-col items-center justify-center relative z-10 transition-colors duration-200"
+                  style={{
+                    color: isActive ? '#A8D4E0' : 'rgba(255, 255, 255, 0.45)',
                   }}
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 border-none bg-transparent text-left cursor-pointer w-full"
                 >
-                  <User size={16} />
-                  Mi Cuenta
-                </button>
-                <Link
-                  href="/pedidos"
-                  onClick={() => setMenuAbierto(false)}
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 text-decoration-none"
-                >
-                  <ClipboardList size={16} />
-                  Mis Pedidos
-                </Link>
-                <button
-                  onClick={() => {
-                    logout()
-                    setMenuAbierto(false)
-                  }}
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-950/10 transition-all flex items-center gap-2 border-none bg-transparent text-left cursor-pointer w-full"
-                >
-                  <LogOut size={16} />
-                  Cerrar sesión ({user.nombre})
-                </button>
-              </>
-            ) : (
-              <Link
-                href="/auth/login"
-                onClick={() => setMenuAbierto(false)}
-                className="px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/10 transition-all text-decoration-none"
-              >
-                Iniciar sesión
+                  <Icon size={19} strokeWidth={isActive ? 2.5 : 2} />
+                  <span style={{ fontSize: '9px', fontWeight: isActive ? 800 : 500, marginTop: '3px', letterSpacing: '0.3px' }}>
+                    {tab.label}
+                  </span>
+                </div>
               </Link>
-            )}
-          </div>
-        )}
-      </header>
+            )
+          })}
+        </nav>
+
+        {/* Separate circular ShoppingCart button */}
+        <button
+          onClick={toggleCartDrawer}
+          className="flex items-center justify-center shadow-2xl relative shrink-0 transition-transform active:scale-95 border-none cursor-pointer"
+          style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '20px',
+            background: 'rgba(8, 26, 48, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            color: 'white',
+            padding: 0,
+          }}
+        >
+          <ShoppingCart size={21} style={{ color: 'white' }} />
+          {totalItems > 0 && (
+            <span 
+              className="absolute -top-1.5 -right-1.5 h-5 min-w-[20px] px-1 bg-bc-orange text-white text-[10px] font-black rounded-full flex items-center justify-center border-2"
+              style={{
+                borderColor: '#020b18',
+                boxShadow: '0 4px 12px rgba(220,120,40,0.3)',
+              }}
+            >
+              {totalItems}
+            </span>
+          )}
+        </button>
+      </div>
 
       {/* MODAL DETALLES DE CUENTA ("Mi Perfil") */}
       {profileModalOpen && user && (
