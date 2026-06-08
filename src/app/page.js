@@ -12,11 +12,31 @@ export const metadata = {
   title: 'Agua a Domicilio en Sucre y Santa Cruz | Bajo Cero Agua Premium',
   description: 'Pedido y recarga de agua purificada de mesa a domicilio en Sucre y Santa Cruz de la Sierra. Distribución rápida de bidones de 20 litros con envío gratis.',
   keywords: ['agua en sucre', 'agua en santa cruz', 'agua a domicilio sucre', 'agua a domicilio santa cruz', 'agua purificada bolivia', 'bidones de agua sucre', 'bajo cero agua', 'agua de mesa santa cruz'],
+  openGraph: {
+    title: 'Agua a Domicilio en Sucre y Santa Cruz | Bajo Cero Agua Premium',
+    description: 'Pedido y recarga de agua purificada de mesa a domicilio en Sucre y Santa Cruz de la Sierra. Distribución rápida de bidones de 20 litros con envío gratis.',
+    url: 'https://bajo-cero-web.vercel.app',
+    siteName: 'Bajo Cero',
+    locale: 'es_BO',
+    type: 'website',
+  },
 }
 
 export default function Home() {
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Bajo Cero',
+        alternateName: ['Bajo Cero Agua Premium', 'Agua Bajo Cero'],
+        url: 'https://bajo-cero-web.vercel.app',
+    }
+
     return (
         <main style={{ background: '#020b18' }}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
 
             {/* HERO */}
             <section className="relative h-screen flex items-center justify-center overflow-hidden">

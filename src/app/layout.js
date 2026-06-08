@@ -8,12 +8,24 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-display' })
 
 export const metadata = {
-  title: 'Bajo Cero',
+  metadataBase: new URL('https://bajo-cero-web.vercel.app'),
+  title: {
+    default: 'Bajo Cero',
+    template: '%s | Bajo Cero',
+  },
   description: 'Agua purificada con entrega a domicilio en Bolivia',
   icons: {
     icon: '/bajocerologo.png',
     shortcut: '/bajocerologo.png',
     apple: '/bajocerologo.png',
+  },
+  openGraph: {
+    siteName: 'Bajo Cero',
+    title: 'Bajo Cero',
+    description: 'Agua purificada con entrega a domicilio en Bolivia',
+    url: 'https://bajo-cero-web.vercel.app',
+    locale: 'es_BO',
+    type: 'website',
   },
 }
 
