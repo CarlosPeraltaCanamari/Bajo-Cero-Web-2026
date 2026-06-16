@@ -31,12 +31,26 @@ export default function LoginClient() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if (!ci.trim() || !contrasena) {
+    const cleanCi = ci.trim()
+    if (!cleanCi || !contrasena) {
       toast.error('Completa todos los campos')
       return
     }
 
-    const exito = await login(ci, contrasena)
+    // Validación de formato de CI
+    const ciRegex = /^[a-zA-Z0-9-]{5,12}$/
+    if (!ciRegex.test(cleanCi)) {
+      toast.error('El CI debe tener entre 5 y 12 caracteres y contener solo letras, números y guiones')
+      return
+    }
+
+    // Validación de longitud de contraseña
+    if (contrasena.length < 6 || contrasena.length > 32) {
+      toast.error('La contraseña debe tener entre 6 y 32 caracteres')
+      return
+    }
+
+    const exito = await login(cleanCi, contrasena)
     if (exito) {
       toast.success('Sesión iniciada correctamente')
       const target = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('redirect') || '/pedidos' : '/pedidos'

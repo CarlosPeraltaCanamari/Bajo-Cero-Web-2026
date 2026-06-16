@@ -6,9 +6,11 @@ import { Check, Clock, Truck, MapPin, Phone, User, Calendar, CreditCard, Externa
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { toast, Toaster } from 'react-hot-toast'
+import useAuthStore from '@/store/authStore'
 
 export default function DetallePedidoClient({ pedidoId }) {
   const supabase = createClient()
+  const { user } = useAuthStore()
   const [pedido, setPedido] = useState(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(null)
@@ -33,10 +35,17 @@ export default function DetallePedidoClient({ pedidoId }) {
           .single()
 
         if (fetchError) throw fetchError
+        
+        // IDOR check: verify that the logged-in user owns this order
+        if (!user || data.cliente_ci !== user.ci) {
+          setError('Acceso denegado. No tienes permisos para ver este pedido.')
+          return
+        }
+
         setPedido(data)
       } catch (err) {
         console.error('Error fetching order details:', err)
-        setError(err.message || 'No se pudo cargar la información del pedido.')
+        setError('No se pudo cargar la información del pedido. Por favor intenta de nuevo.')
       } finally {
         setCargando(false)
       }
@@ -45,7 +54,20 @@ export default function DetallePedidoClient({ pedidoId }) {
     if (pedidoId) {
       fetchPedido()
     }
-  }, [pedidoId])
+  }, [pedidoId, user])
+
+  useEffect(() => {
+    if (pedido && !cargando) {
+      const autoDownload = sessionStorage.getItem('bajocero_auto_download_pdf')
+      if (autoDownload === 'true') {
+        sessionStorage.removeItem('bajocero_auto_download_pdf')
+        const timer = setTimeout(() => {
+          descargarReciboPDF()
+        }, 1200)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [pedido, cargando])
 
   if (cargando) {
     return (
@@ -57,13 +79,31 @@ export default function DetallePedidoClient({ pedidoId }) {
   }
 
   if (error || !pedido) {
+    const isAccesoDenegado = error?.includes('Acceso denegado')
     return (
       <div className="text-center py-16 px-4 max-w-md mx-auto text-white">
-        <h2 className="text-xl font-bold mb-3 text-red-400">Error al cargar el pedido</h2>
-        <p className="text-white/45 text-sm mb-6">{error || 'El pedido solicitado no existe o no se pudo recuperar.'}</p>
-        <Link href="/catalogo" className="px-6 py-2.5 bg-white/10 hover:bg-white/15 border border-white/10 rounded-xl text-xs font-bold transition-all">
-          Ir al catálogo
-        </Link>
+        {isAccesoDenegado ? (
+          <div className="glass" style={{ borderRadius: '24px', padding: '36px 24px', border: '1px solid rgba(244,63,94,0.2)', background: 'rgba(244,63,94,0.02)' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(244,63,94,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <span style={{ fontSize: '24px' }}>🔒</span>
+            </div>
+            <h2 className="text-xl font-extrabold mb-3 text-rose-400">Acceso Denegado</h2>
+            <p className="text-white/60 text-sm mb-6 leading-relaxed">
+              Este pedido pertenece a otra cuenta de cliente. Por motivos de seguridad y privacidad, no tienes autorización para visualizar sus detalles.
+            </p>
+            <Link href="/catalogo" className="inline-block px-6 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-bold transition-all">
+              Volver al Catálogo
+            </Link>
+          </div>
+        ) : (
+          <div className="glass" style={{ borderRadius: '24px', padding: '36px 24px', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h2 className="text-xl font-bold mb-3 text-red-400">Error al cargar el pedido</h2>
+            <p className="text-white/45 text-sm mb-6">{error || 'El pedido solicitado no existe o no se pudo recuperar.'}</p>
+            <Link href="/catalogo" className="inline-block px-6 py-2.5 bg-white/10 hover:bg-white/15 border border-white/10 rounded-xl text-xs font-bold transition-all">
+              Ir al catálogo
+            </Link>
+          </div>
+        )}
       </div>
     )
   }
@@ -91,7 +131,7 @@ export default function DetallePedidoClient({ pedidoId }) {
     txt += `Cliente: ${cliente.nombre || ''} ${cliente.apellido || ''}\n`
     txt += `CI: ${cliente.ci || ''}\n`
     txt += `Teléfono: ${cliente.telefono || ''}\n`
-    txt += `Dirección: ${pedido.direccion_entrega || ''}\n\n`
+    txt += `Dirección: ${cliente.direccion || ''}\n\n`
     txt += `${line}\n`
     txt += `DETALLE DEL PEDIDO\n`
     txt += `${line}\n`
@@ -124,16 +164,175 @@ export default function DetallePedidoClient({ pedidoId }) {
     URL.revokeObjectURL(link.href)
   }
 
+  const descargarReciboPDF = async () => {
+    if (!pedido) return
+    const toastId = toast.loading('Generando recibo PDF...')
+    try {
+      const { jsPDF } = await import('jspdf')
+      const doc = new jsPDF()
+
+      // Colores de la marca
+      const cBlue = [0, 74, 143]
+      const cOrange = [220, 120, 40]
+      const cDark = [33, 37, 41]
+      const cGray = [120, 120, 120]
+
+      // Header
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(22)
+      doc.setTextColor(...cBlue)
+      doc.text('BAJO CERO', 15, 25)
+
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9)
+      doc.setTextColor(...cGray)
+      doc.text('Agua Premium Purificada · Bolivia', 15, 30)
+      doc.text('Soporte / WhatsApp: +591 71808300', 15, 35)
+
+      // Recibo ID (Derecha)
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(14)
+      doc.setTextColor(...cOrange)
+      doc.text('RECIBO DE PEDIDO', 130, 25)
+      
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(12)
+      doc.setTextColor(...cDark)
+      doc.text(`ID: #${pedido.id}`, 130, 31)
+      doc.text(`Fecha: ${pedido.fecha}`, 130, 37)
+
+      // Línea divisoria
+      doc.setDrawColor(220, 220, 220)
+      doc.line(15, 43, 195, 43)
+
+      // Datos del Cliente y Envío
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(11)
+      doc.setTextColor(...cBlue)
+      doc.text('DETALLES DE CLIENTE Y ENTREGA', 15, 52)
+
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9.5)
+      doc.setTextColor(...cDark)
+      doc.text(`Cliente: ${cliente.nombre || ''} ${cliente.apellido || ''}`, 15, 59)
+      doc.text(`CI / Documento: ${cliente.ci || ''}`, 15, 65)
+      doc.text(`Teléfono: ${cliente.telefono || ''}`, 15, 71)
+
+      // Dirección con ajuste automático de línea si es muy larga
+      const splitDireccion = doc.splitTextToSize(`Dirección: ${cliente.direccion || ''}`, 90)
+      doc.text(splitDireccion, 105, 59)
+      doc.text(`Método de Pago: ${pagoRelacion.metodo || 'Efectivo'} (${pagoRelacion.estado || 'Pendiente'})`, 105, 71)
+
+      // Tabla de productos
+      let currentY = 82
+      doc.setDrawColor(220, 220, 220)
+      doc.line(15, currentY, 195, currentY)
+
+      currentY += 6
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(9)
+      doc.setTextColor(...cBlue)
+      doc.text('CANT.', 15, currentY)
+      doc.text('DESCRIPCIÓN DEL PRODUCTO', 32, currentY)
+      doc.text('PRECIO UNIT.', 135, currentY, { align: 'right' })
+      doc.text('TOTAL', 185, currentY, { align: 'right' })
+
+      currentY += 3
+      doc.setDrawColor(200, 200, 200)
+      doc.line(15, currentY, 195, currentY)
+
+      // Items
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9.5)
+      doc.setTextColor(...cDark)
+
+      detalles.forEach((d) => {
+        currentY += 7
+        // Si el eje Y está por salirse de la página, añadir página
+        if (currentY > 270) {
+          doc.addPage()
+          currentY = 20
+        }
+        
+        doc.text(`${d.cantidad}x`, 15, currentY)
+        doc.text(d.producto?.nombre || 'Producto', 32, currentY)
+        doc.text(`${d.precio_unitario.toFixed(2)} Bs.`, 135, currentY, { align: 'right' })
+        doc.text(`${(d.precio_unitario * d.cantidad).toFixed(2)} Bs.`, 185, currentY, { align: 'right' })
+      })
+
+      // Línea antes del resumen
+      currentY += 5
+      doc.setDrawColor(220, 220, 220)
+      doc.line(15, currentY, 195, currentY)
+
+      // Resumen de totales
+      currentY += 8
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9.5)
+      doc.setTextColor(...cGray)
+      doc.text('Subtotal:', 130, currentY)
+      doc.setTextColor(...cDark)
+      doc.text(`${subtotal.toFixed(2)} Bs.`, 185, currentY, { align: 'right' })
+
+      if (pedido.porcentaje_descuento > 0) {
+        currentY += 6
+        doc.setTextColor(46, 125, 50) // Verde para descuento
+        doc.text(`Descuento (${pedido.porcentaje_descuento}%):`, 130, currentY)
+        doc.text(`-${descuento.toFixed(2)} Bs.`, 185, currentY, { align: 'right' })
+      }
+
+      currentY += 6
+      doc.setTextColor(...cGray)
+      doc.text('Envío:', 130, currentY)
+      doc.setTextColor(46, 125, 50)
+      doc.text('Gratis', 185, currentY, { align: 'right' })
+
+      currentY += 8
+      doc.setDrawColor(180, 180, 180)
+      doc.line(120, currentY - 5, 195, currentY - 5)
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(11)
+      doc.setTextColor(...cBlue)
+      doc.text('TOTAL A PAGAR:', 120, currentY)
+      doc.text(`${total.toFixed(2)} Bs.`, 185, currentY, { align: 'right' })
+
+      // Footer
+      doc.setFont('helvetica', 'italic')
+      doc.setFontSize(9.5)
+      doc.setTextColor(...cGray)
+      doc.text('¡Gracias por elegir la pureza de Bajo Cero!', 105, 275, { align: 'center' })
+      
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(8.5)
+      doc.text('Este documento sirve como constancia oficial de tu pedido.', 105, 281, { align: 'center' })
+
+      doc.save(`recibo-bajocero-pedido-${pedido.id}.pdf`)
+      toast.success('Recibo PDF descargado con éxito.', { id: toastId })
+    } catch (err) {
+      console.error('Error al generar PDF:', err)
+      toast.error('Ocurrió un error al generar el PDF.', { id: toastId })
+    }
+  }
+
   const imprimirRecibo = () => {
     window.print()
   }
 
   const handleEnviarEmail = async (e) => {
     e.preventDefault()
-    if (!emailDestinatario.trim()) {
+    const cleanEmail = emailDestinatario.trim()
+    if (!cleanEmail) {
+      toast.error('Por favor ingresa un correo electrónico.')
+      return
+    }
+
+    // Validación de formato de Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(cleanEmail)) {
       toast.error('Por favor ingresa un correo electrónico válido.')
       return
     }
+
     setEnviandoEmail(true)
 
     await new Promise(resolve => setTimeout(resolve, 800))
@@ -146,7 +345,7 @@ export default function DetallePedidoClient({ pedidoId }) {
 
     setEnviandoEmail(false)
     setEmailEnviado(true)
-    toast.success(`¡Recibo enviado con éxito a ${emailDestinatario.trim()}!`)
+    toast.success(`¡Recibo enviado con éxito a ${cleanEmail}!`)
 
     setTimeout(() => {
       setMostrarModalEmail(false)
@@ -165,7 +364,11 @@ export default function DetallePedidoClient({ pedidoId }) {
   // Mapeamos: 'Pendiente' -> Recibido, 'Pagado' -> Entregado. 
   // Podemos simular un estado intermedio 'En camino' si es 'Pendiente' pero tiene repartidor
   const repartidorAsignado = pedido.repartidor_id !== null
-  const esPagado = pedido.estado === 'Pagado' || pagoRelacion.estado === 'Pagado'
+  const esPagado = 
+    pedido.estado === 'Pagado' || 
+    pedido.estado === 'Completado' || 
+    pedido.estado === 'Entregado' || 
+    pagoRelacion.estado === 'Pagado'
 
   let estadoActual = 0 // 0: Recibido, 1: En Camino/Preparación, 2: Entregado/Pagado
   if (esPagado) {
@@ -187,7 +390,7 @@ export default function DetallePedidoClient({ pedidoId }) {
 *Celular:* ${cliente.telefono}
 *Método de Pago:* ${pagoRelacion.metodo || 'Efectivo'} (${pagoRelacion.estado || 'Pendiente'})
 *Monto Total:* ${total.toFixed(2)} Bs.
-*Dirección:* ${pedido.direccion_entrega}
+*Dirección:* ${cliente.direccion || ''}
 
 Quiero confirmar el pedido y coordinar la entrega.`)
   const urlWhatsApp = `https://wa.me/${numWhatsApp}?text=${waText}`
@@ -409,9 +612,24 @@ Quiero confirmar el pedido y coordinar la entrega.`)
               Mi Recibo
             </h3>
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5, margin: 0 }}>
-              Descarga tu recibo en formato de texto para compartirlo, o imprímelo (guárdalo como PDF) directamente.
+              Descarga tu recibo en formato PDF oficial o archivo de texto, imprímelo, o envíalo a tu correo.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                onClick={descargarReciboPDF}
+                style={{
+                  width: '100%', height: '40px', borderRadius: '12px',
+                  background: 'var(--color-bc-orange)', color: 'white', fontWeight: 700, fontSize: '11px',
+                  letterSpacing: '1px', textTransform: 'uppercase', border: 'none',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  transition: 'all 0.2s', cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(220,120,40,0.2)'
+                }}
+                className="hover:opacity-90 active:scale-98"
+              >
+                <Download size={13} style={{ marginRight: '6px' }} />
+                <span>Descargar Recibo (PDF)</span>
+              </button>
               <button
                 onClick={descargarReciboTXT}
                 style={{
@@ -444,12 +662,12 @@ Quiero confirmar el pedido y coordinar la entrega.`)
                 onClick={() => setMostrarModalEmail(true)}
                 style={{
                   width: '100%', height: '40px', borderRadius: '12px',
-                  background: 'rgba(220,120,40,0.1)', color: 'var(--color-bc-orange)', fontWeight: 700, fontSize: '11px',
-                  letterSpacing: '1px', textTransform: 'uppercase', border: '1px solid rgba(220,120,40,0.2)',
+                  background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)', fontWeight: 700, fontSize: '11px',
+                  letterSpacing: '1px', textTransform: 'uppercase', border: '1px solid rgba(255,255,255,0.1)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                   transition: 'all 0.2s', cursor: 'pointer'
                 }}
-                className="hover:bg-bc-orange/15 active:scale-98"
+                className="hover:bg-white/12 hover:text-white active:scale-98"
               >
                 <Mail size={13} style={{ marginRight: '6px' }} />
                 <span>Enviar a mi Correo</span>
@@ -489,7 +707,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
                 <MapPin size={15} color="var(--color-bc-blue)" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                   <span style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'rgba(255,255,255,0.4)' }}>Dirección de envío</span>
-                  <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1.4 }}>{pedido.direccion_entrega}</span>
+                  <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1.4 }}>{cliente.direccion}</span>
                 </div>
               </div>
 
@@ -545,7 +763,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
             </div>
             <div>
               <p style={{ margin: '3px 0' }}><strong>Teléfono:</strong> {cliente.telefono}</p>
-              <p style={{ margin: '3px 0' }}><strong>Dirección:</strong> {pedido.direccion_entrega}</p>
+              <p style={{ margin: '3px 0' }}><strong>Dirección:</strong> {cliente.direccion}</p>
               <p style={{ margin: '3px 0' }}><strong>Método de Pago:</strong> {pagoRelacion.metodo || 'Efectivo'}</p>
             </div>
           </div>

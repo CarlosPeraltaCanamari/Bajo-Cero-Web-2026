@@ -38,29 +38,6 @@ export default function PedidosHistoricoPage() {
   const [buscado, setBuscado] = useState(false)
   const [error, setError] = useState('')
 
-  // Intentar cargar el último CI usado desde LocalStorage al iniciar
-  useEffect(() => {
-    const ultimoCi = localStorage.getItem('bajocero_ultimo_ci')
-    if (ultimoCi) {
-      setCiBusqueda(ultimoCi)
-      buscarPedidos(ultimoCi)
-    } else {
-      const ultimoPedidoId = localStorage.getItem('bajocero_ultimo_pedido_id')
-      if (ultimoPedidoId) {
-        window.location.href = `/pedidos/${ultimoPedidoId}`
-      }
-    }
-  }, [])
-
-  const handleBuscar = (e) => {
-    e.preventDefault()
-    if (!ciBusqueda.trim()) {
-      setError('Por favor ingresa tu CI para buscar.')
-      return
-    }
-    buscarPedidos(ciBusqueda.trim())
-  }
-
   const buscarPedidos = async (ciValue) => {
     setCargando(true)
     setError('')
@@ -87,6 +64,40 @@ export default function PedidosHistoricoPage() {
     } finally {
       setCargando(false)
     }
+  }
+
+  // Intentar cargar el último CI usado desde LocalStorage al iniciar
+  useEffect(() => {
+    const ultimoCi = localStorage.getItem('bajocero_ultimo_ci')
+    if (ultimoCi) {
+      Promise.resolve().then(() => {
+        setCiBusqueda(ultimoCi)
+        buscarPedidos(ultimoCi)
+      })
+    } else {
+      const ultimoPedidoId = localStorage.getItem('bajocero_ultimo_pedido_id')
+      if (ultimoPedidoId) {
+        window.location.href = `/pedidos/${ultimoPedidoId}`
+      }
+    }
+  }, [])
+
+  const handleBuscar = (e) => {
+    e.preventDefault()
+    const cleanCi = ciBusqueda.trim()
+    if (!cleanCi) {
+      setError('Por favor ingresa tu CI para buscar.')
+      return
+    }
+    
+    // Validación de formato de CI
+    const ciRegex = /^[a-zA-Z0-9-]{5,12}$/
+    if (!ciRegex.test(cleanCi)) {
+      setError('El CI debe tener entre 5 y 12 caracteres (solo letras, números y guiones).')
+      return
+    }
+    
+    buscarPedidos(cleanCi)
   }
 
   return (

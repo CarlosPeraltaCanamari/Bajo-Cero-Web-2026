@@ -75,9 +75,61 @@ export default function MayoristaClient() {
   // Manejo de formulario corporativo
   const handleSubmitForm = async (e) => {
     e.preventDefault()
-    if (!formNombre.trim() || !formTelefono.trim() || !formEmpresa.trim()) {
+
+    const cleanNombre = formNombre.trim()
+    const cleanEmpresa = formEmpresa.trim()
+    const cleanTelefono = formTelefono.trim()
+    const cleanEmail = formEmail.trim()
+    const cleanMensaje = formMensaje.trim()
+
+    if (!cleanNombre || !cleanTelefono || !cleanEmpresa) {
       toast.error('Por favor completa los campos obligatorios (*).')
       return
+    }
+
+    // Validación de Nombre
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{2,70}$/
+    if (!nameRegex.test(cleanNombre)) {
+      toast.error('El nombre debe tener entre 2 y 70 caracteres (solo letras y espacios)')
+      return
+    }
+
+    // Validación de Empresa
+    if (cleanEmpresa.length < 2 || cleanEmpresa.length > 100) {
+      toast.error('La empresa debe tener entre 2 y 100 caracteres')
+      return
+    }
+    if (cleanEmpresa.includes('<') || cleanEmpresa.includes('>')) {
+      toast.error('El nombre de la empresa contiene caracteres no permitidos')
+      return
+    }
+
+    // Validación de Teléfono
+    const telefonoRegex = /^\+?[0-9\s-]{7,15}$/
+    if (!telefonoRegex.test(cleanTelefono)) {
+      toast.error('El teléfono debe tener entre 7 y 15 dígitos')
+      return
+    }
+
+    // Validación de Email (opcional)
+    if (cleanEmail) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(cleanEmail)) {
+        toast.error('Por favor ingresa un correo electrónico válido')
+        return
+      }
+    }
+
+    // Validación de Mensaje (opcional)
+    if (cleanMensaje) {
+      if (cleanMensaje.length > 500) {
+        toast.error('El mensaje no puede superar los 500 caracteres')
+        return
+      }
+      if (cleanMensaje.includes('<') || cleanMensaje.includes('>')) {
+        toast.error('El mensaje contiene caracteres no permitidos')
+        return
+      }
     }
 
     setEnviando(true)
@@ -92,12 +144,12 @@ export default function MayoristaClient() {
       // WhatsApp redirección para agilizar la cotización
       const numWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '59171808300'
       const waText = encodeURIComponent(`Hola Bajo Cero! Quisiera solicitar información sobre compras corporativas/mayoristas.
-*Contacto:* ${formNombre.trim()}
-*Empresa/Negocio:* ${formEmpresa.trim()}
-*Teléfono:* ${formTelefono.trim()}
-*Email:* ${formEmail.trim() || 'No provisto'}
+*Contacto:* ${cleanNombre}
+*Empresa/Negocio:* ${cleanEmpresa}
+*Teléfono:* ${cleanTelefono}
+*Email:* ${cleanEmail || 'No provisto'}
 *Volumen mensual estimado:* ${formVolumen} unidades/mes
-*Mensaje:* ${formMensaje.trim() || 'Interesado en cotizaciones'}`)
+*Mensaje:* ${cleanMensaje || 'Interesado en cotizaciones'}`)
       
       window.open(`https://wa.me/${numWhatsApp}?text=${waText}`, '_blank')
 

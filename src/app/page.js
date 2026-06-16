@@ -58,7 +58,7 @@ export default function Home() {
                         Bolivia · Agua Premium a Domicilio
                     </p>
                     <h1
-                        className={`anime-hero-title text-6xl md:text-8xl font-black text-white mb-6 leading-none tracking-tight ${comfortaa.className}`}
+                        className={`anime-hero-title text-6xl md:text-8xl font-black mb-6 leading-none tracking-tight bg-linear-to-b from-white via-slate-100 to-sky-200 bg-clip-text text-transparent filter drop-shadow-[0_4px_20px_rgba(168,212,224,0.25)] ${comfortaa.className}`}
                         style={{ opacity: 0 }}
                     >
                         bajo cero
@@ -66,11 +66,11 @@ export default function Home() {
                     <p className="anime-hero-desc text-white/60 text-base md:text-lg mb-10 max-w-md leading-relaxed" style={{ opacity: 0 }}>
                         Pureza desde las alturas de Bolivia. Agua purificada de alta calidad directa a tu hogar u oficina en Sucre y Santa Cruz.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <Link href="/catalogo" className="anime-hero-cta glass px-7 py-3 rounded-full text-white text-sm font-semibold hover:bg-white/15 transition-all duration-300" style={{ opacity: 0 }}>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <Link href="/catalogo" className="anime-hero-cta glass px-8 py-3.5 rounded-full text-white text-sm font-semibold hover:bg-white/15 transition-all duration-300 inline-flex items-center justify-center whitespace-nowrap min-w-[180px] hover:scale-105 hover:border-white/30 hover:shadow-lg hover:shadow-white/5" style={{ opacity: 0 }}>
                             Ver catálogo
                         </Link>
-                        <Link href="/mayorista" className="anime-hero-cta px-7 py-3 rounded-full text-white text-sm font-semibold bg-bc-orange hover:bg-bc-orange-dark transition-all duration-300 shadow-lg shadow-orange-500/20" style={{ opacity: 0 }}>
+                        <Link href="/mayorista" className="anime-hero-cta px-8 py-3.5 rounded-full text-white text-sm font-semibold bg-linear-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition-all duration-300 shadow-lg shadow-orange-500/20 inline-flex items-center justify-center whitespace-nowrap min-w-[180px] hover:scale-105 hover:shadow-orange-500/35" style={{ opacity: 0 }}>
                             Comprar al por mayor
                         </Link>
                     </div>
@@ -103,15 +103,26 @@ export default function Home() {
                 }} />
 
                 <div style={{ maxWidth: '960px', margin: '0 auto', position: 'relative' }}>
-                    <div className="grid-responsive-4col">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                         {[
                             { num: '15+', label: 'Años de experiencia' },
                             { num: '50K', label: 'Clientes satisfechos' },
                             { num: '100%', label: 'Pureza garantizada' },
                             { num: '24h', label: 'Entrega rápida' },
                         ].map((s, i) => (
-                            <div key={s.label} style={{ textAlign: 'center' }} className="flex flex-col items-center gap-2 stats-item-padding border-white/10 even:border-l md:border-l md:first:border-l-0">
-                                <span style={{ fontFamily: 'var(--font-display)', fontSize: '42px', fontWeight: 900, color: '#A8D4E0', lineHeight: 1 }}>
+                            <div 
+                                key={s.label} 
+                                style={{ 
+                                    textAlign: 'center',
+                                    background: 'rgba(123, 184, 200, 0.03)',
+                                    border: '1px solid rgba(123, 184, 200, 0.08)',
+                                    borderRadius: '20px',
+                                    backdropFilter: 'blur(12px)',
+                                    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                                }} 
+                                className="flex flex-col items-center gap-2 stats-item-padding hover:bg-white/5 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_12px_24px_rgba(0,0,0,0.15)] group"
+                            >
+                                <span className="bg-linear-to-r from-sky-200 to-cyan-300 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300" style={{ fontFamily: 'var(--font-display)', fontSize: '42px', fontWeight: 900, lineHeight: 1 }}>
                                     {s.num}
                                 </span>
                                 <span style={{ fontSize: '11px', color: 'rgba(168,212,224,0.45)', letterSpacing: '2px', textTransform: 'uppercase' }}>
@@ -167,13 +178,17 @@ export default function Home() {
                             { icon: '💧', title: 'Agua de Mesa Premium', desc: 'Ideal para hidratación diaria en hogares y oficinas. Un sabor ligero y pureza que cuida tu salud.' },
                         ].map((item) => (
                             <div key={item.title} style={{
-                                background: 'rgba(123,184,200,0.05)',
-                                border: '1px solid rgba(123,184,200,0.1)',
-                                borderRadius: '20px',
-                                display: 'flex', flexDirection: 'column', gap: '12px',
-                                transition: 'all 0.3s',
-                            }} className="anime-benefit-card card-benefit-padding hover:bg-white/5">
-                                <span style={{ fontSize: '32px', lineHeight: 1 }}>{item.icon}</span>
+                                background: 'rgba(123,184,200,0.03)',
+                                border: '1px solid rgba(123,184,200,0.08)',
+                                borderRadius: '24px',
+                                display: 'flex', flexDirection: 'column', gap: '16px',
+                                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                                backdropFilter: 'blur(12px)',
+                                WebkitBackdropFilter: 'blur(12px)',
+                            }} className="anime-benefit-card card-benefit-padding hover:bg-white/4 hover:-translate-y-2 hover:border-cyan-400/30 hover:shadow-[0_20px_40px_rgba(6,182,212,0.08)] group">
+                                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-br from-cyan-500/20 to-blue-600/10 border border-cyan-400/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] mb-2 group-hover:scale-110 transition-transform duration-300">
+                                    <span style={{ fontSize: '22px', lineHeight: 1 }}>{item.icon}</span>
+                                </div>
                                 <h3 style={{ color: 'white', fontWeight: 600, fontSize: '15px' }}>{item.title}</h3>
                                 <p style={{ color: 'rgba(168,212,224,0.45)', fontSize: '13px', lineHeight: 1.6 }}>{item.desc}</p>
                             </div>
@@ -214,10 +229,13 @@ export default function Home() {
 
                 <div style={{ maxWidth: '640px', margin: '0 auto', position: 'relative', textAlign: 'center' }}>
                     <div style={{
-                        background: 'rgba(123,184,200,0.04)',
-                        border: '1px solid rgba(196,168,130,0.15)',
+                        background: 'linear-gradient(135deg, rgba(123,184,200,0.02) 0%, rgba(196,168,130,0.05) 100%)',
+                        border: '1px solid rgba(196, 168, 130, 0.2)',
                         borderRadius: '28px',
-                    }} className="anime-cta-card card-py-cta">
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }} className="anime-cta-card card-py-cta hover:border-amber-400/30 hover:shadow-[0_20px_50px_rgba(220,120,40,0.08)]">
                         <p style={{ fontSize: '10px', color: 'rgba(196,168,130,0.5)', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '16px' }}>
                             Empresas y distribuidores
                         </p>
@@ -227,13 +245,7 @@ export default function Home() {
                         <p style={{ color: 'rgba(196,168,130,0.5)', fontSize: '14px', marginBottom: '32px', lineHeight: 1.7 }}>
                             Precios especiales para compras al por mayor.<br />Hasta 45% de descuento según volumen.
                         </p>
-                        <Link href="/mayorista" style={{
-                            display: 'inline-block', padding: '12px 32px',
-                            background: 'var(--color-bc-orange)', color: 'white',
-                            fontWeight: 600, fontSize: '14px', borderRadius: '999px',
-                            textDecoration: 'none',
-                            boxShadow: '0 8px 32px rgba(220,120,40,0.3)',
-                        }} className="hover:opacity-90 transition-opacity">
+                        <Link href="/mayorista" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-white text-sm font-semibold bg-linear-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/35 transition-all duration-300 hover:scale-105 whitespace-nowrap min-w-[200px]" style={{ textDecoration: 'none' }}>
                             Quiero precios mayoristas
                         </Link>
                     </div>

@@ -46,12 +46,16 @@ export default function CheckoutClient() {
 
   const [porcentajeDescuento, setPorcentajeDescuento] = useState(0)
   const [codigoDescuento, setCodigoDescuento] = useState('')
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     const pct = localStorage.getItem('bajocero_descuento_porcentaje')
     const cod = localStorage.getItem('bajocero_descuento_codigo')
-    if (pct) setPorcentajeDescuento(Number(pct))
-    if (cod) setCodigoDescuento(cod)
+    Promise.resolve().then(() => {
+      if (pct) setPorcentajeDescuento(Number(pct))
+      if (cod) setCodigoDescuento(cod)
+      setMounted(true)
+    })
   }, [])
 
   const descuento = (subtotal * porcentajeDescuento) / 100
@@ -121,6 +125,7 @@ export default function CheckoutClient() {
   const [metodoPago, setMetodoPago] = useState('Efectivo')
   const [cargando, setCargando] = useState(false)
   const [transaccionId, setTransaccionId] = useState('')
+  const [pagoSimulado, setPagoSimulado] = useState(false)
 
   useEffect(() => {
     if (metodoPago === 'QR' && canvasRef.current) {
@@ -141,15 +146,94 @@ export default function CheckoutClient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!ci.trim() || !nombre.trim() || !apellido.trim() || !telefono.trim() || !direccion.trim()) {
+    
+    const cleanCi = ci.trim()
+    const cleanNombre = nombre.trim()
+    const cleanApellido = apellido.trim()
+    const cleanTelefono = telefono.trim()
+    const cleanDireccion = direccion.trim()
+
+    if (!cleanCi || !cleanNombre || !cleanApellido || !cleanTelefono || !cleanDireccion) {
       toast.error('Por favor completa todos los campos obligatorios')
       return
     }
+
+    // Validación de CI
+    const ciRegex = /^[a-zA-Z0-9-]{5,12}$/
+    if (!ciRegex.test(cleanCi)) {
+      toast.error('El CI debe tener entre 5 y 12 caracteres (letras, números y guiones)')
+      return
+    }
+
+    // Validación de Nombre
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{2,50}$/
+    if (!nameRegex.test(cleanNombre)) {
+      toast.error('El nombre debe tener entre 2 y 50 caracteres (solo letras y espacios)')
+      return
+    }
+
+    // Validación de Apellido
+    if (!nameRegex.test(cleanApellido)) {
+      toast.error('El apellido debe tener entre 2 y 50 caracteres (solo letras y espacios)')
+      return
+    }
+
+    // Validación de Teléfono
+    const telefonoRegex = /^\+?[0-9\s-]{7,15}$/
+    if (!telefonoRegex.test(cleanTelefono)) {
+      toast.error('El teléfono debe tener entre 7 y 15 dígitos')
+      return
+    }
+
+    // Validación de Dirección
+    if (cleanDireccion.length < 5 || cleanDireccion.length > 150) {
+      toast.error('La dirección debe tener entre 5 y 150 caracteres')
+      return
+    }
+    if (cleanDireccion.includes('<') || cleanDireccion.includes('>')) {
+      toast.error('La dirección contiene caracteres no permitidos')
+      return
+    }
+
+    // Validación de Factura (si requiere)
+    let cleanNombreFactura = ''
+    let cleanNitFactura = ''
+    if (requiereFactura) {
+      cleanNombreFactura = nombreFactura.trim()
+      cleanNitFactura = nitFactura.trim()
+
+      if (!cleanNombreFactura || !cleanNitFactura) {
+        toast.error('Completa los campos de factura obligatorios')
+        return
+      }
+
+      const nitRegex = /^[a-zA-Z0-9-]{5,15}$/
+      if (!nitRegex.test(cleanNitFactura)) {
+        toast.error('El NIT/CI para la factura debe tener entre 5 y 15 caracteres (solo letras, números y guiones)')
+        return
+      }
+
+      const razonSocialRegex = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s&.]{2,80}$/
+      if (!razonSocialRegex.test(cleanNombreFactura)) {
+        toast.error('La Razón Social / Nombre para factura debe tener entre 2 y 80 caracteres')
+        return
+      }
+    }
+
+    // Validación de ID de Transacción (si método de pago es QR y se ingresa)
+    const cleanTransaccionId = transaccionId.trim()
+    if (metodoPago === 'QR' && cleanTransaccionId) {
+      const transaccionRegex = /^[a-zA-Z0-9-_]{4,30}$/
+      if (!transaccionRegex.test(cleanTransaccionId)) {
+        toast.error('El ID de transacción debe tener entre 4 y 30 caracteres alfanuméricos')
+        return
+      }
+    }
+
     setCargando(true)
     const toastId = toast.loading('Procesando tu pedido...')
     try {
-      const cleanCi = ci.trim()
-      const cleanDireccion = `${direccion.trim()} (Ciudad: ${ciudad}, Zona: ${zona})`
+      const fullDireccion = `${cleanDireccion} (Ciudad: ${ciudad}, Zona: ${zona})`
       const { data: clienteExistente } = await supabase.from('cliente').select('*').eq('ci', cleanCi).maybeSingle()
       
       let updatedUser = null
@@ -157,10 +241,10 @@ export default function CheckoutClient() {
         const { data, error } = await supabase
           .from('cliente')
           .update({ 
-            nombre: nombre.trim(), 
-            apellido: apellido.trim(), 
-            telefono: telefono.trim(), 
-            direccion: cleanDireccion,
+            nombre: cleanNombre, 
+            apellido: cleanApellido, 
+            telefono: cleanTelefono, 
+            direccion: fullDireccion,
             latitud: latitud,
             longitud: longitud
           })
@@ -174,10 +258,10 @@ export default function CheckoutClient() {
           .from('cliente')
           .insert({ 
             ci: cleanCi, 
-            nombre: nombre.trim(), 
-            apellido: apellido.trim(), 
-            telefono: telefono.trim(), 
-            direccion: cleanDireccion, 
+            nombre: cleanNombre, 
+            apellido: cleanApellido, 
+            telefono: cleanTelefono, 
+            direccion: fullDireccion, 
             habilitado_plan_pagos: false,
             latitud: latitud,
             longitud: longitud
@@ -195,27 +279,72 @@ export default function CheckoutClient() {
 
       const fecha = new Date().toISOString().split('T')[0]
       const hora = new Date().toTimeString().split(' ')[0]
-      const { data: nuevaVenta, error: errorVenta } = await supabase.from('venta').insert({ fecha, hora, tipo: 'Contado', estado: 'Pendiente', porcentaje_descuento: porcentajeDescuento, cliente_ci: cleanCi, direccion_entrega: cleanDireccion }).select().single()
-      if (errorVenta || !nuevaVenta) throw new Error(errorVenta?.message)
+      const isQrSimulado = metodoPago === 'QR' && pagoSimulado
+      let nuevaVenta = null
+      
+      const { data: ventaData, error: errorVenta } = await supabase.from('venta').insert({ 
+        fecha, 
+        hora, 
+        tipo: 'Contado', 
+        estado: isQrSimulado ? 'Pagado' : 'Pendiente', 
+        pagado: isQrSimulado ? true : false,
+        porcentaje_descuento: porcentajeDescuento, 
+        cliente_ci: cleanCi
+      }).select().single()
+      if (errorVenta || !ventaData) throw new Error(errorVenta?.message)
+      nuevaVenta = ventaData
+      
       const { error: errorDetalles } = await supabase.from('venta_detalles').insert(items.map(item => ({ venta_id: nuevaVenta.id, producto_id: item.producto_id, cantidad: item.cantidad, precio_unitario: item.precio })))
       if (errorDetalles) throw new Error(errorDetalles.message)
-      const { data: nuevoPago, error: errorPago } = await supabase.from('pago').insert({ fecha, hora, monto: total, metodo: metodoPago, estado: 'Pendiente' }).select().single()
+      const { data: nuevoPago, error: errorPago } = await supabase.from('pago').insert({ 
+        fecha, 
+        hora, 
+        monto: total, 
+        metodo: metodoPago, 
+        estado: isQrSimulado ? 'Pagado' : 'Pendiente' 
+      }).select().single()
       if (errorPago || !nuevoPago) throw new Error(errorPago?.message)
       await supabase.from('pago_venta').insert({ pago_id: nuevoPago.pago_id, venta_id: nuevaVenta.id })
       if (requiereFactura) {
-        await supabase.from('factura').insert({ subtotal, total, descuento, fecha_emision: fecha, nombre_completo: nombreFactura.trim() || `${nombre.trim()} ${apellido.trim()}`, nit: nitFactura.trim() || cleanCi, venta_id: nuevaVenta.id })
+        await supabase.from('factura').insert({ subtotal, total, descuento, fecha_emision: fecha, nombre_completo: cleanNombreFactura, nit: cleanNitFactura, venta_id: nuevaVenta.id })
       }
       localStorage.setItem('bajocero_ultimo_pedido_id', String(nuevaVenta.id))
       localStorage.removeItem('bajocero_descuento_porcentaje')
       localStorage.removeItem('bajocero_descuento_codigo')
+      if (isQrSimulado) {
+        sessionStorage.setItem('bajocero_auto_download_pdf', 'true')
+      }
       clearCart()
       toast.success('¡Pedido realizado con éxito!', { id: toastId })
       router.push(`/pedidos/${nuevaVenta.id}`)
     } catch (error) {
-      toast.error(`Error: ${error.message}`, { id: toastId })
+      console.error("Error al procesar el pedido:", error)
+      if (nuevaVenta && nuevaVenta.id) {
+        try {
+          await supabase.from('venta').delete().eq('id', nuevaVenta.id)
+          console.log(`Rollback exitoso: Venta #${nuevaVenta.id} eliminada por error en consultas posteriores.`)
+        } catch (rollbackErr) {
+          console.error("Error al ejecutar rollback:", rollbackErr)
+        }
+      }
+      toast.error('Ocurrió un error al procesar tu pedido. Por favor, intenta de nuevo o contáctanos por WhatsApp.', { id: toastId })
     } finally {
       setCargando(false)
     }
+  }
+
+  if (!mounted) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: '#020b18',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <span style={{ width: '32px', height: '32px', border: '2px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--color-bc-orange)', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+      </div>
+    )
   }
 
   if (!user) {
@@ -356,8 +485,8 @@ export default function CheckoutClient() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={labelStyle}>CI / Documento de Identidad *</label>
-                  <input type="text" required placeholder="Ej. 7465086" value={ci} onChange={(e) => setCi(e.target.value)} style={inputStyle} />
-                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '2px' }}>Usamos tu CI para identificarte y asociar tu pedido.</span>
+                  <input type="text" required placeholder="Ej. 7465086" value={ci} disabled={true} style={{ ...inputStyle, opacity: 0.6, cursor: 'not-allowed' }} />
+                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '2px' }}>Tu CI está vinculado a tu cuenta iniciada.</span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -455,7 +584,13 @@ export default function CheckoutClient() {
                   { key: 'Efectivo', icon: <DollarSign size={20} />, title: 'Efectivo al recibir', desc: 'Pagas al repartidor en tu puerta.' },
                   { key: 'QR', icon: <QrCode size={20} />, title: 'Pago Simple QR', desc: 'Escanea y transfiere desde tu app bancaria.' },
                 ].map(({ key, icon, title, desc }) => (
-                  <div key={key} onClick={() => setMetodoPago(key)} style={{
+                  <div key={key} onClick={() => {
+                    setMetodoPago(key)
+                    if (key !== 'QR') {
+                      setPagoSimulado(false)
+                      setTransaccionId('')
+                    }
+                  }} style={{
                     border: `1px solid ${metodoPago === key ? 'var(--color-bc-orange)' : 'rgba(255,255,255,0.1)'}`,
                     borderRadius: '16px', padding: '16px 20px',
                     display: 'flex', alignItems: 'center', gap: '14px',
@@ -494,6 +629,79 @@ export default function CheckoutClient() {
                       <label style={labelStyle}>ID de Transacción (Opcional)</label>
                       <input type="text" placeholder="Ej. TXN-98432104" value={transaccionId} onChange={(e) => setTransaccionId(e.target.value)} style={{ ...inputStyle, height: '40px', fontSize: '13px' }} />
                     </div>
+
+                    {/* Simulador de Pago para Desarrollo */}
+                    <div style={{
+                      marginTop: '10px',
+                      padding: '16px',
+                      borderRadius: '14px',
+                      background: 'linear-gradient(135deg, rgba(220,120,40,0.08) 0%, rgba(0,74,143,0.08) 100%)',
+                      border: `1px dashed ${pagoSimulado ? 'rgba(52,211,153,0.4)' : 'rgba(220,120,40,0.4)'}`,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '10px',
+                      transition: 'all 0.3s ease-in-out'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '10px', fontWeight: 900, color: 'var(--color-bc-orange)', letterSpacing: '0.8px', textTransform: 'uppercase' }}>
+                          🛠️ Entorno de Simulación
+                        </span>
+                        <span style={{
+                          fontSize: '8px',
+                          fontWeight: 800,
+                          background: pagoSimulado ? 'rgba(52,211,153,0.15)' : 'rgba(245,158,11,0.15)',
+                          color: pagoSimulado ? '#34d399' : '#f59e0b',
+                          padding: '2px 8px',
+                          borderRadius: '999px',
+                          border: `1px solid ${pagoSimulado ? 'rgba(52,211,153,0.2)' : 'rgba(245,158,11,0.2)'}`,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px'
+                        }}>
+                          {pagoSimulado ? 'Escaneado' : 'Esperando Escaneo'}
+                        </span>
+                      </div>
+                      <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', lineHeight: '1.4', margin: 0 }}>
+                        Simula que el cliente escaneó el código QR desde su celular y la transacción bancaria fue aprobada instantáneamente.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const esSimulado = !pagoSimulado
+                          setPagoSimulado(esSimulado)
+                          if (esSimulado) {
+                            const randId = `QR-SIM-${Math.floor(Math.random() * 899999 + 100000)}`
+                            setTransaccionId(randId)
+                            toast.success('¡Pago QR simulado con éxito! Transacción aprobada.')
+                          } else {
+                            setTransaccionId('')
+                            toast.success('Simulación cancelada.')
+                          }
+                        }}
+                        style={{
+                          height: '36px',
+                          borderRadius: '10px',
+                          background: pagoSimulado ? 'rgba(52,211,153,0.15)' : 'rgba(255,255,255,0.06)',
+                          color: pagoSimulado ? '#34d399' : 'white',
+                          border: `1px solid ${pagoSimulado ? 'rgba(52,211,153,0.3)' : 'rgba(255,255,255,0.12)'}`,
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px',
+                          transition: 'all 0.25s'
+                        }}
+                        className="hover:scale-[1.01] active:scale-[0.99]"
+                      >
+                        {pagoSimulado ? (
+                          <>✓ Escaneo y Pago Exitoso ({transaccionId || 'Generando...'})</>
+                        ) : (
+                          <>Simular Escaneo y Pago QR</>
+                        )}
+                      </button>
+                    </div>
+
                   </div>
                 </motion.div>
               )}

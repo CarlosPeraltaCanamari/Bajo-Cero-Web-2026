@@ -35,17 +35,66 @@ export default function RegistroClient() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!ci.trim() || !nombre.trim() || !apellido.trim() || !telefono.trim() || !direccion.trim() || !contrasena) {
+    const cleanCi = ci.trim()
+    const cleanNombre = nombre.trim()
+    const cleanApellido = apellido.trim()
+    const cleanTelefono = telefono.trim()
+    const cleanDireccion = direccion.trim()
+
+    if (!cleanCi || !cleanNombre || !cleanApellido || !cleanTelefono || !cleanDireccion || !contrasena) {
       toast.error('Por favor completa todos los campos')
       return
     }
 
+    // Validación de CI
+    const ciRegex = /^[a-zA-Z0-9-]{5,12}$/
+    if (!ciRegex.test(cleanCi)) {
+      toast.error('El CI debe tener entre 5 y 12 caracteres y contener solo letras, números y guiones')
+      return
+    }
+
+    // Validación de Nombre
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{2,50}$/
+    if (!nameRegex.test(cleanNombre)) {
+      toast.error('El nombre debe tener entre 2 y 50 caracteres y contener solo letras y espacios')
+      return
+    }
+
+    // Validación de Apellido
+    if (!nameRegex.test(cleanApellido)) {
+      toast.error('El apellido debe tener entre 2 y 50 caracteres y contener solo letras y espacios')
+      return
+    }
+
+    // Validación de Teléfono
+    const telefonoRegex = /^\+?[0-9\s-]{7,15}$/
+    if (!telefonoRegex.test(cleanTelefono)) {
+      toast.error('El teléfono debe tener entre 7 y 15 dígitos')
+      return
+    }
+
+    // Validación de Dirección
+    if (cleanDireccion.length < 5 || cleanDireccion.length > 150) {
+      toast.error('La dirección debe tener entre 5 y 150 caracteres')
+      return
+    }
+    if (cleanDireccion.includes('<') || cleanDireccion.includes('>')) {
+      toast.error('La dirección contiene caracteres no permitidos')
+      return
+    }
+
+    // Validación de Contraseña
+    if (contrasena.length < 6 || contrasena.length > 32) {
+      toast.error('La contraseña debe tener entre 6 y 32 caracteres')
+      return
+    }
+
     const exito = await registro({
-      ci,
-      nombre,
-      apellido,
-      telefono,
-      direccion,
+      ci: cleanCi,
+      nombre: cleanNombre,
+      apellido: cleanApellido,
+      telefono: cleanTelefono,
+      direccion: cleanDireccion,
       contrasena
     })
 

@@ -56,13 +56,13 @@ export default function GoogleMapPicker({ lat, lng, onChange, defaultCity }) {
     if (apiKey) {
       // Load Google Maps API
       if (window.google && window.google.maps) {
-        setGoogleLoaded(true)
+        Promise.resolve().then(() => setGoogleLoaded(true))
         return
       }
 
       const existingScript = document.getElementById('google-maps-script')
       if (existingScript) {
-        const handleLoad = () => setGoogleLoaded(true)
+        const handleLoad = () => Promise.resolve().then(() => setGoogleLoaded(true))
         existingScript.addEventListener('load', handleLoad)
         return () => existingScript.removeEventListener('load', handleLoad)
       }
@@ -72,7 +72,7 @@ export default function GoogleMapPicker({ lat, lng, onChange, defaultCity }) {
       script.src = `https://maps.googleapis.com/maps/api/js?libraries=places&key=${apiKey}`
       script.async = true
       script.defer = true
-      script.onload = () => setGoogleLoaded(true)
+      script.onload = () => Promise.resolve().then(() => setGoogleLoaded(true))
       script.onerror = () => {
         console.error('Error al cargar la API de Google Maps.')
         toast.error('No se pudo cargar Google Maps. Recargando en modo alternativo...')
@@ -81,7 +81,7 @@ export default function GoogleMapPicker({ lat, lng, onChange, defaultCity }) {
     } else {
       // Load Leaflet (OSM fallback) dynamically
       if (window.L) {
-        setLeafletLoaded(true)
+        Promise.resolve().then(() => setLeafletLoaded(true))
         return
       }
 
@@ -97,7 +97,7 @@ export default function GoogleMapPicker({ lat, lng, onChange, defaultCity }) {
       // Append Leaflet JS
       const existingLeafletScript = document.getElementById('leaflet-js')
       if (existingLeafletScript) {
-        const handleLoad = () => setLeafletLoaded(true)
+        const handleLoad = () => Promise.resolve().then(() => setLeafletLoaded(true))
         existingLeafletScript.addEventListener('load', handleLoad)
         return () => existingLeafletScript.removeEventListener('load', handleLoad)
       }
@@ -106,7 +106,7 @@ export default function GoogleMapPicker({ lat, lng, onChange, defaultCity }) {
       script.id = 'leaflet-js'
       script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
       script.async = true
-      script.onload = () => setLeafletLoaded(true)
+      script.onload = () => Promise.resolve().then(() => setLeafletLoaded(true))
       document.head.appendChild(script)
     }
   }, [apiKey])
@@ -333,7 +333,7 @@ export default function GoogleMapPicker({ lat, lng, onChange, defaultCity }) {
         toast.success('Ubicación GPS obtenida con éxito.')
       },
       (error) => {
-        console.error('Error getting location', error)
+        console.warn('Error getting location', error)
         setLoadingGps(false)
         if (error.code === 1) {
           toast.error('Permiso de ubicación denegado. Habilita los permisos en tu navegador.')
