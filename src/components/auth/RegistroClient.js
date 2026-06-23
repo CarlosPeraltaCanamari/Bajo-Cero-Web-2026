@@ -110,7 +110,7 @@ export default function RegistroClient() {
       minHeight: '100vh',
       paddingTop: '120px',
       paddingBottom: '80px',
-      background: '#07100F',
+      background: 'transparent',
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
@@ -135,9 +135,8 @@ export default function RegistroClient() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          className="glass"
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: '28px',
             padding: '36px 28px',
           }}

@@ -9,11 +9,11 @@ const comfortaa = Comfortaa({
 })
 
 export const metadata = {
-  title: 'Agua a Domicilio en Sucre y Santa Cruz | Bajo Cero Agua Premium',
+  title: 'Agua a Domicilio en Sucre y Santa Cruz | Bajo Cero Agua Purificada',
   description: 'Pedido y recarga de agua purificada de mesa a domicilio en Sucre y Santa Cruz de la Sierra. Distribución rápida de bidones de 20 litros con envío gratis.',
   keywords: ['agua en sucre', 'agua en santa cruz', 'agua a domicilio sucre', 'agua a domicilio santa cruz', 'agua purificada bolivia', 'bidones de agua sucre', 'bajo cero agua', 'agua de mesa santa cruz'],
   openGraph: {
-    title: 'Agua a Domicilio en Sucre y Santa Cruz | Bajo Cero Agua Premium',
+    title: 'Agua a Domicilio en Sucre y Santa Cruz | Bajo Cero Agua Purificada',
     description: 'Pedido y recarga de agua purificada de mesa a domicilio en Sucre y Santa Cruz de la Sierra. Distribución rápida de bidones de 20 litros con envío gratis.',
     url: 'https://bajo-cero-web.vercel.app',
     siteName: 'Bajo Cero',
@@ -27,7 +27,7 @@ export default function Home() {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'Bajo Cero',
-        alternateName: ['Bajo Cero Agua Premium', 'Agua Bajo Cero'],
+        alternateName: ['Bajo Cero Agua Purificada', 'Agua Bajo Cero'],
         url: 'https://bajo-cero-web.vercel.app',
     }
 
@@ -55,7 +55,7 @@ export default function Home() {
 
                 <div className="relative z-10 flex flex-col items-center text-center px-4 pt-16">
                     <p className="anime-hero-subtitle text-white/50 text-xs uppercase tracking-[6px] mb-6 font-medium">
-                        Bolivia · Agua Premium a Domicilio
+                        Bolivia · Agua Purificada a Domicilio
                     </p>
                     <h1
                         className={`anime-hero-title text-6xl md:text-8xl font-black mb-6 leading-none tracking-tight bg-linear-to-b from-white via-slate-100 to-sky-200 bg-clip-text text-transparent filter drop-shadow-[0_4px_20px_rgba(168,212,224,0.25)] ${comfortaa.className}`}
@@ -175,7 +175,7 @@ export default function Home() {
                         {[
                             { icon: '❄️', title: 'Pureza Garantizada', desc: 'Agua purificada mediante microfiltración y ósmosis inversa. El 99.9% de las impurezas eliminadas.' },
                             { icon: '🚚', title: 'Envío Gratis en 24h', desc: 'Distribución y reparto a domicilio rápido en Sucre y Santa Cruz de la Sierra sin costo adicional.' },
-                            { icon: '💧', title: 'Agua de Mesa Premium', desc: 'Ideal para hidratación diaria en hogares y oficinas. Un sabor ligero y pureza que cuida tu salud.' },
+                            { icon: '💧', title: 'Agua Purificada de Mesa', desc: 'Ideal para el consumo diario en hogares y oficinas. Un agua pura y ligera para cuidar tu salud.' },
                         ].map((item) => (
                             <div key={item.title} style={{
                                 background: 'rgba(123,184,200,0.03)',

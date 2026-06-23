@@ -25,8 +25,6 @@ const buttonStyle = {
 }
 
 const sectionStyle = {
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.08)',
   borderRadius: '24px', padding: '24px',
 }
 
@@ -105,7 +103,7 @@ export default function PedidosHistoricoPage() {
       minHeight: '100vh',
       paddingTop: '120px',
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       position: 'relative',
       overflow: 'hidden',
       color: 'white'
@@ -135,12 +133,12 @@ export default function PedidosHistoricoPage() {
             Mis Pedidos
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '13px', lineHeight: 1.6, maxWidth: '440px', margin: '0 auto' }}>
-            Ingresa tu CI para consultar el historial y el estado de entrega en tiempo real de tus pedidos de agua premium.
+            Ingresa tu CI para consultar el historial y el estado de entrega en tiempo real de tus pedidos de agua purificada.
           </p>
         </div>
 
         {/* Buscador */}
-        <form onSubmit={handleBuscar} style={{ ...sectionStyle, display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '32px' }}>
+        <form onSubmit={handleBuscar} style={{ ...sectionStyle, display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '32px' }} className="glass">
           <div style={{ position: 'relative', flex: 1 }}>
             <Search className="text-white/30" size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
             <input
@@ -173,7 +171,7 @@ export default function PedidosHistoricoPage() {
               <span style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', letterSpacing: '1.5px' }}>Consultando base de datos...</span>
             </div>
           ) : buscado && pedidos.length === 0 ? (
-            <div style={{ ...sectionStyle, textAlign: 'center', padding: '48px 24px' }}>
+            <div style={{ ...sectionStyle, textAlign: 'center', padding: '48px 24px' }} className="glass">
               <ClipboardList size={30} style={{ color: 'rgba(255,255,255,0.2)', marginBottom: '16px' }} />
               <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'white', marginBottom: '8px' }}>No se encontraron pedidos</h3>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', lineHeight: 1.6, maxWidth: '280px', margin: '0 auto 24px' }}>
@@ -200,9 +198,8 @@ export default function PedidosHistoricoPage() {
                       key={ped.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
+                      className="glass"
                       style={{
-                        background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
                         borderRadius: '24px',
                         padding: '24px 28px',
                         display: 'flex',

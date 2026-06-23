@@ -63,7 +63,7 @@ export default function LoginClient() {
       minHeight: '100vh',
       paddingTop: '120px',
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
@@ -88,9 +88,8 @@ export default function LoginClient() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          className="glass"
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: '28px',
             padding: '40px 32px',
           }}

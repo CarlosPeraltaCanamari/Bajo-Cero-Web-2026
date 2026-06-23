@@ -13,7 +13,7 @@ export default function Footer() {
     ]
 
     return (
-        <footer style={{ background: '#080808', color: 'white' }}>
+        <footer style={{ position: 'relative', zIndex: 10, background: '#080808', color: 'white' }}>
 
             <div style={{
                 height: '1px',
@@ -29,7 +29,7 @@ export default function Footer() {
                             bajo cero
                         </span>
                         <p style={{ fontSize: '13px', lineHeight: 1.6, color: 'rgba(255,255,255,0.3)', maxWidth: '180px' }}>
-                            Agua purificada premium. Frescura directa a tu puerta.
+                            Agua purificada de mesa. Frescura directa a tu puerta.
                         </p>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
                             <div style={{

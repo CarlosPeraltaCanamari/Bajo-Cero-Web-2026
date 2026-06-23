@@ -2,7 +2,7 @@ import DetallePedidoClient from '@/components/pedidos/DetallePedidoClient'
 
 export const metadata = {
   title: 'Detalle de Pedido — Bajo Cero',
-  description: 'Sigue el estado de tu entrega de agua premium Bajo Cero.',
+  description: 'Sigue el estado de tu entrega de agua purificada Bajo Cero.',
 }
 
 export default async function PedidoDetallePage({ params }) {
@@ -14,7 +14,7 @@ export default async function PedidoDetallePage({ params }) {
       minHeight: '100vh',
       paddingTop: '110px',
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       position: 'relative',
       overflow: 'hidden',
     }}>

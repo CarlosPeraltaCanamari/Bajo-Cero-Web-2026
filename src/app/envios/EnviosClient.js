@@ -52,7 +52,7 @@ export default function EnviosClient() {
       minHeight: '100vh',
       paddingTop: '120px',
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
@@ -120,7 +120,7 @@ export default function EnviosClient() {
             style={{ color: 'rgba(255,255,255,0.45)', fontSize: '15px', lineHeight: 1.7 }}
           >
             Operamos con distribución directa en las ciudades de **Sucre** y **Santa Cruz de la Sierra**. 
-            Llevamos agua premium purificada directo a tu hogar, oficina o negocio sin costo de envío.
+            Llevamos agua purificada de mesa directo a tu hogar, oficina o negocio sin costo de envío.
           </motion.p>
         </div>
 
@@ -283,15 +283,15 @@ export default function EnviosClient() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
+          className="glass"
           style={{ 
             background: 'linear-gradient(135deg, rgba(0,74,143,0.15) 0%, rgba(220,120,40,0.08) 100%)',
-            border: '1px solid rgba(168,212,224,0.15)',
             borderRadius: '28px',
             padding: '48px',
             textAlign: 'center'
           }}
         >
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, marginBottom: '12px' }}>¿Listo para pedir tu Agua Premium?</h2>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, marginBottom: '12px' }}>¿Listo para pedir tu agua purificada?</h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', marginBottom: '32px', maxWidth: '500px', margin: '0 auto 32px', lineHeight: 1.6 }}>
             Accede a nuestro catálogo de pureza y realiza tu primer pedido en menos de dos minutos. Envíos gratis en Sucre y Santa Cruz.
           </p>

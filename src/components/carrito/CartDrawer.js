@@ -194,7 +194,7 @@ export default function CartDrawer() {
                     maxWidth: '240px',
                     marginBottom: '28px',
                   }}>
-                    Explora nuestro catálogo y selecciona agua purificada premium.
+                    Explora nuestro catálogo y selecciona agua purificada.
                   </p>
                   <button
                     onClick={() => setCartDrawerOpen(false)}

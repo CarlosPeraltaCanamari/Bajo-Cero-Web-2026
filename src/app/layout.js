@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import CartDrawer from '@/components/carrito/CartDrawer'
+import BackgroundVideo from '@/components/layout/BackgroundVideo'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-display' })
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
       <body className={`${inter.variable} ${nunito.variable} flex flex-col min-h-screen`}>
         <Navbar />
         <CartDrawer />
+        <BackgroundVideo />
         <main className="flex-1">
           {children}
         </main>

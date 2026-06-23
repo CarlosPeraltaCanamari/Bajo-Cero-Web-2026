@@ -26,8 +26,6 @@ const labelStyle = {
 }
 
 const sectionStyle = {
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.08)',
   borderRadius: '24px', padding: '28px',
 }
 
@@ -36,6 +34,64 @@ const stepBadge = {
   background: 'var(--color-bc-blue)',
   display: 'flex', alignItems: 'center', justifyContent: 'center',
   fontSize: '11px', fontWeight: 900, flexShrink: 0, color: 'white',
+}
+
+async function obtenerRepartidorAsignado(supabase, clienteZona) {
+  try {
+    const { data: repartidores, error: repError } = await supabase
+      .from('repartidor')
+      .select('id, zona, estado')
+    
+    if (repError || !repartidores || repartidores.length === 0) {
+      console.warn("No se encontraron repartidores en la base de datos:", repError)
+      return null
+    }
+
+    const cleanClienteZona = clienteZona ? clienteZona.toLowerCase().trim() : ''
+    const repartidoresMismaZona = repartidores.filter(r => 
+      r.zona && r.zona.toLowerCase().trim() === cleanClienteZona
+    )
+
+    const poolRepartidores = repartidoresMismaZona.length > 0 ? repartidoresMismaZona : repartidores
+
+    const { data: ventasActivas, error: ventasError } = await supabase
+      .from('venta')
+      .select('repartidor_id')
+      .eq('entregado', false)
+      .not('repartidor_id', 'is', null)
+
+    if (ventasError) {
+      console.error("Error al consultar ventas activas para asignación de repartidor:", ventasError)
+      return poolRepartidores[0].id
+    }
+
+    const workload = {}
+    repartidores.forEach(r => {
+      workload[r.id] = 0
+    })
+    ventasActivas.forEach(v => {
+      if (workload[v.repartidor_id] !== undefined) {
+        workload[v.repartidor_id]++
+      }
+    })
+
+    let repartidorElegido = poolRepartidores[0]
+    let minCarga = workload[repartidorElegido.id] ?? 999999
+
+    for (let i = 1; i < poolRepartidores.length; i++) {
+      const rep = poolRepartidores[i]
+      const carga = workload[rep.id] ?? 0
+      if (carga < minCarga) {
+        minCarga = carga
+        repartidorElegido = rep
+      }
+    }
+
+    return repartidorElegido.id
+  } catch (error) {
+    console.error("Error en obtenerRepartidorAsignado:", error)
+    return null
+  }
 }
 
 export default function CheckoutClient() {
@@ -282,6 +338,9 @@ export default function CheckoutClient() {
       const isQrSimulado = metodoPago === 'QR' && pagoSimulado
       let nuevaVenta = null
       
+      // Obtener asignación automática de repartidor
+      const repartidorId = await obtenerRepartidorAsignado(supabase, zona)
+
       const { data: ventaData, error: errorVenta } = await supabase.from('venta').insert({ 
         fecha, 
         hora, 
@@ -289,7 +348,9 @@ export default function CheckoutClient() {
         estado: isQrSimulado ? 'Pagado' : 'Pendiente', 
         pagado: isQrSimulado ? true : false,
         porcentaje_descuento: porcentajeDescuento, 
-        cliente_ci: cleanCi
+        cliente_ci: cleanCi,
+        repartidor_id: repartidorId,
+        delivery: true
       }).select().single()
       if (errorVenta || !ventaData) throw new Error(errorVenta?.message)
       nuevaVenta = ventaData
@@ -353,7 +414,7 @@ export default function CheckoutClient() {
         minHeight: '100vh',
         paddingTop: '120px',
         paddingBottom: '80px',
-        background: '#020b18',
+        background: 'transparent',
         color: 'white',
         position: 'relative',
         overflow: 'hidden',
@@ -369,9 +430,8 @@ export default function CheckoutClient() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            className="glass"
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
               borderRadius: '28px',
               padding: '40px 32px',
             }}
@@ -447,7 +507,7 @@ export default function CheckoutClient() {
       minHeight: '100vh',
       paddingTop: '120px',   /* espacio generoso bajo el navbar */
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
@@ -476,7 +536,7 @@ export default function CheckoutClient() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
             {/* 1. Datos de entrega */}
-            <div style={sectionStyle}>
+            <div style={sectionStyle} className="glass">
               <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', gap: '10px', paddingBottom: '18px', borderBottom: '1px solid rgba(255,255,255,0.07)', marginBottom: '24px', marginTop: 0 }}>
                 <span style={stepBadge}>1</span>
                 Datos de Entrega
@@ -546,7 +606,7 @@ export default function CheckoutClient() {
             </div>
 
             {/* 2. Factura */}
-            <div style={sectionStyle}>
+            <div style={sectionStyle} className="glass">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: requiereFactura ? '18px' : '0', borderBottom: requiereFactura ? '1px solid rgba(255,255,255,0.07)' : 'none', marginBottom: requiereFactura ? '20px' : '0' }}>
                 <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}>
                   <span style={stepBadge}>2</span>
@@ -573,7 +633,7 @@ export default function CheckoutClient() {
             </div>
 
             {/* 3. Método de pago */}
-            <div style={sectionStyle}>
+            <div style={sectionStyle} className="glass">
               <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', gap: '10px', paddingBottom: '18px', borderBottom: '1px solid rgba(255,255,255,0.07)', marginBottom: '20px', marginTop: 0 }}>
                 <span style={stepBadge}>3</span>
                 Método de Pago
@@ -710,7 +770,7 @@ export default function CheckoutClient() {
 
           {/* ── Derecha sticky ── */}
           <div className="lg:sticky lg:top-24">
-            <div style={{ ...sectionStyle, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ ...sectionStyle, display: 'flex', flexDirection: 'column', gap: '20px' }} className="glass">
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'white', margin: 0 }}>Resumen del Pedido</h2>

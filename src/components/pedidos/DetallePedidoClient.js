@@ -124,7 +124,7 @@ export default function DetallePedidoClient({ pedidoId }) {
     const line = '-'.repeat(45)
 
     let txt = `${divider}\n`
-    txt += `          BAJO CERO - AGUA PREMIUM\n`
+    txt += `          BAJO CERO - AGUA PURIFICADA\n`
     txt += `          RECIBO DE PEDIDO #${pedido.id}\n`
     txt += `${divider}\n\n`
     txt += `Fecha: ${pedido.fecha} ${pedido.hora.substring(0, 5)}\n`
@@ -186,7 +186,7 @@ export default function DetallePedidoClient({ pedidoId }) {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(9)
       doc.setTextColor(...cGray)
-      doc.text('Agua Premium Purificada · Bolivia', 15, 30)
+      doc.text('Agua Purificada de Mesa · Bolivia', 15, 30)
       doc.text('Soporte / WhatsApp: +591 71808300', 15, 35)
 
       // Recibo ID (Derecha)
@@ -356,7 +356,7 @@ export default function DetallePedidoClient({ pedidoId }) {
 
   const handleEnviarMailto = () => {
     const subject = encodeURIComponent(`Recibo de Compra Bajo Cero - Pedido #${pedido.id}`)
-    const body = encodeURIComponent(`Hola!\n\nAquí tienes el resumen de tu compra de Agua Premium Bajo Cero:\n\nPedido: #${pedido.id}\nFecha: ${pedido.fecha}\nMonto Total: ${total.toFixed(2)} Bs.\n\nDetalle:\n${detalles.map(d => `${d.cantidad}x ${d.producto?.nombre} - ${(d.precio_unitario * d.cantidad).toFixed(2)} Bs.`).join('\n')}\n\n¡Gracias por tu preferencia!\nBajo Cero S.R.L.`)
+    const body = encodeURIComponent(`Hola!\n\nAquí tienes el resumen de tu compra de Agua Purificada Bajo Cero:\n\nPedido: #${pedido.id}\nFecha: ${pedido.fecha}\nMonto Total: ${total.toFixed(2)} Bs.\n\nDetalle:\n${detalles.map(d => `${d.cantidad}x ${d.producto?.nombre} - ${(d.precio_unitario * d.cantidad).toFixed(2)} Bs.`).join('\n')}\n\n¡Gracias por tu preferencia!\nBajo Cero S.R.L.`)
     window.open(`mailto:${emailDestinatario.trim() || ''}?subject=${subject}&body=${body}`, '_blank')
   }
 
@@ -749,7 +749,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
       <div className="print-area" style={{ fontFamily: 'sans-serif', color: 'black' }}>
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <h1 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 6px', letterSpacing: '1px' }}>BAJO CERO</h1>
-          <p style={{ fontSize: '12px', margin: '0', color: '#555' }}>Agua Premium Purificada · Bolivia</p>
+          <p style={{ fontSize: '12px', margin: '0', color: '#555' }}>Agua Purificada de Mesa · Bolivia</p>
           <p style={{ fontSize: '12px', margin: '4px 0 0', color: '#555' }}>Celular/WhatsApp: 71808300</p>
         </div>
 

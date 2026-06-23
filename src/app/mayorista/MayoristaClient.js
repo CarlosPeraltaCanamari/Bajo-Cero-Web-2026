@@ -21,9 +21,9 @@ import {
 
 // Productos disponibles para el cálculo de mayoristas
 const PRODUCTOS_CALCULADORA = [
-  { id: '1', nombre: 'Bidón de Agua Premium 20L', precio: 20.00, desc: 'Ideal para oficinas y hogares' },
-  { id: '2', nombre: 'Botella de Agua Premium 2L', precio: 6.00, desc: 'Formato familiar de consumo diario' },
-  { id: '3', nombre: 'Botella de Agua Premium 500ml', precio: 3.00, desc: 'Práctica para eventos y personal' },
+  { id: '1', nombre: 'Bidón de Agua Purificada 20L', precio: 20.00, desc: 'Ideal para oficinas y hogares' },
+  { id: '2', nombre: 'Botella de Agua Purificada 2L', precio: 6.00, desc: 'Formato familiar de consumo diario' },
+  { id: '3', nombre: 'Botella de Agua Purificada 500ml', precio: 3.00, desc: 'Práctica para eventos y personal' },
   { id: '4', nombre: 'Pack de 6 Botellas 2L', precio: 32.00, desc: 'Empaque termocontraíble ideal para retail' }
 ]
 
@@ -188,7 +188,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
       minHeight: '100vh',
       paddingTop: '100px',
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       position: 'relative',
       overflow: 'hidden',
     }}>
@@ -302,9 +302,8 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
               <motion.div
                 key={client.name}
                 whileHover={{ y: -5, borderColor: 'rgba(123, 184, 200, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                className="glass"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  border: '1px solid rgba(255, 255, 255, 0.06)',
                   borderRadius: '20px',
                   padding: '24px',
                   display: 'flex',
@@ -756,9 +755,8 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 + idx * 0.1 }}
+                className="glass"
                 style={{
-                  background: 'rgba(123,184,200,0.03)',
-                  border: '1px solid rgba(123,184,200,0.06)',
                   borderRadius: '20px',
                   padding: '28px',
                   display: 'flex',

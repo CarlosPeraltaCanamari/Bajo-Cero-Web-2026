@@ -48,7 +48,7 @@ export default function CarritoClient() {
       minHeight: '100vh',
       paddingTop: '120px',
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
@@ -86,8 +86,8 @@ export default function CarritoClient() {
         {isEmpty ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            className="glass"
             style={{
-              background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
               borderRadius: '32px', padding: '80px 24px', textAlign: 'center',
               maxWidth: '480px', margin: '40px auto',
             }}
@@ -125,7 +125,7 @@ export default function CarritoClient() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -40 }}
                     transition={{ duration: 0.2 }}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 border border-white/8 bg-white/4 rounded-2xl transition-colors duration-200 hover:border-white/12"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 glass rounded-2xl transition-colors duration-200 hover:border-white/12"
                   >
                     {/* Bloque info: Imagen e Info de Producto */}
                     <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -194,9 +194,7 @@ export default function CarritoClient() {
 
             {/* Resumen sticky */}
             <div className="lg:sticky lg:top-24">
-              <div style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
+              <div className="glass" style={{
                 borderRadius: '24px', padding: '28px',
                 display: 'flex', flexDirection: 'column', gap: '20px',
               }}>

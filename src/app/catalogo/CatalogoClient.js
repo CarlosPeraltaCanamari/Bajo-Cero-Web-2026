@@ -67,23 +67,24 @@ export default function CatalogoClient({ productosIniciales = [] }) {
       minHeight: '100vh',
       paddingTop: '100px',   /* espacio bajo el navbar fijo */
       paddingBottom: '80px',
-      background: '#020b18',
+      background: 'transparent',
       position: 'relative',
       overflow: 'hidden',
     }}>
       <Toaster position="bottom-right" />
 
+
       {/* Glows de fondo */}
       <div style={{
         position: 'absolute', top: '-100px', left: '25%',
         width: '600px', height: '400px', borderRadius: '50%',
-        background: 'radial-gradient(ellipse, rgba(0,74,143,0.18) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(0,74,143,0.12) 0%, transparent 70%)',
         filter: 'blur(40px)', pointerEvents: 'none',
       }} />
       <div style={{
         position: 'absolute', bottom: '-100px', right: '25%',
         width: '600px', height: '400px', borderRadius: '50%',
-        background: 'radial-gradient(ellipse, rgba(220,120,40,0.08) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(220,120,40,0.06) 0%, transparent 70%)',
         filter: 'blur(40px)', pointerEvents: 'none',
       }} />
 
@@ -107,7 +108,7 @@ export default function CatalogoClient({ productosIniciales = [] }) {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}
             style={{ color: 'rgba(255,255,255,0.45)', fontSize: '15px', lineHeight: 1.7 }}
           >
-            Elige el formato ideal de nuestra agua premium. Frescura y bienestar directo a tu puerta.
+            Elige el formato ideal para tu hogar u oficina. Frescura y bienestar directo a tu puerta.
           </motion.p>
         </div>
 
@@ -214,9 +215,8 @@ export default function CatalogoClient({ productosIniciales = [] }) {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.3 }}
+                    className="glass"
                     style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(255,255,255,0.08)',
                       borderRadius: '24px',
                       padding: '20px',
                       display: 'flex', flexDirection: 'column',

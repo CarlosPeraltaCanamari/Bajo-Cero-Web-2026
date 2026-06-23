@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { ShoppingCart, User, Menu, X, LogOut, ClipboardList, Phone, MapPin, Home, Droplet, Truck, Sparkles } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import useCart from '@/hooks/useCart'
 import useAuthStore from '@/store/authStore'
 import Image from 'next/image'
@@ -112,53 +112,60 @@ export default function Navbar() {
 
           {/* Usuario */}
           {user ? (
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative flex items-center h-[34px]" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-1.5 rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-all font-semibold text-xs px-2.5 h-[34px] cursor-pointer"
                 style={{ background: 'transparent', border: 'none' }}
               >
-                <div className="w-5 h-5 rounded-full bg-bc-orange text-white flex items-center justify-center text-[10px] font-black uppercase">
+                <div className="w-[22px] h-[22px] rounded-full bg-bc-orange text-white flex items-center justify-center text-[10px] font-black uppercase">
                   {user.nombre[0]}
                 </div>
                 <span>{user.nombre}</span>
               </button>
               
-              {dropdownOpen && (
-                <div 
-                  className="absolute right-0 mt-2 w-40 glass rounded-2xl p-1.5 shadow-2xl flex flex-col gap-1 z-50 text-left border border-white/10"
-                  style={{ background: 'rgba(8, 26, 48, 0.95)' }}
-                >
-                  <button
-                    onClick={() => {
-                      setProfileModalOpen(true)
-                      setDropdownOpen(false)
-                    }}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs text-white/70 hover:text-white hover:bg-white/5 transition-colors font-medium border-none bg-transparent cursor-pointer w-full text-left"
+              <AnimatePresence>
+                {dropdownOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    className="absolute right-0 top-full mt-2 w-[190px] glass rounded-2xl p-2 shadow-2xl flex flex-col gap-1 z-50 text-left border border-white/10"
+                    style={{ background: 'rgba(8, 26, 48, 0.95)', backdropFilter: 'blur(20px)' }}
                   >
-                    <User size={13} />
-                    Mi Cuenta
-                  </button>
-                  <Link
-                    href="/pedidos"
-                    onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs text-white/70 hover:text-white hover:bg-white/5 transition-colors font-medium text-left text-decoration-none"
-                  >
-                    <ClipboardList size={13} />
-                    Mis Pedidos
-                  </Link>
-                  <button
-                    onClick={() => {
-                      logout()
-                      setDropdownOpen(false)
-                    }}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs text-rose-400 hover:bg-rose-950/20 hover:text-rose-300 transition-colors font-medium border-none bg-transparent cursor-pointer w-full text-left"
-                  >
-                    <LogOut size={13} />
-                    Cerrar sesión
-                  </button>
-                </div>
-              )}
+                    <button
+                      onClick={() => {
+                        setProfileModalOpen(true)
+                        setDropdownOpen(false)
+                      }}
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors font-medium border-none bg-transparent cursor-pointer w-full text-left"
+                    >
+                      <User size={16} />
+                      Mi Cuenta
+                    </button>
+                    <Link
+                      href="/pedidos"
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors font-medium text-left text-decoration-none"
+                    >
+                      <ClipboardList size={16} />
+                      Mis Pedidos
+                    </Link>
+                    <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 4px' }} />
+                    <button
+                      onClick={() => {
+                        logout()
+                        setDropdownOpen(false)
+                      }}
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors font-medium border-none bg-transparent cursor-pointer w-full text-left"
+                    >
+                      <LogOut size={16} />
+                      Cerrar sesión
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ) : (
             <Link
