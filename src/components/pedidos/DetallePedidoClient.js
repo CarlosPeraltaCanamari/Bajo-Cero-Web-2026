@@ -154,7 +154,6 @@ export default function DetallePedidoClient({ pedidoId }) {
     txt += `${divider}\n\n`
     txt += `Método de Pago: ${pagoRelacion.metodo || 'Efectivo'} (${pagoRelacion.estado || 'Pendiente'})\n`
     txt += `¡Gracias por elegir la pureza de Bajo Cero!\n`
-    txt += `Si tienes dudas, contáctanos al WhatsApp: 59171808300\n`
 
     const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' })
     const link = document.createElement('a')
@@ -187,7 +186,6 @@ export default function DetallePedidoClient({ pedidoId }) {
       doc.setFontSize(9)
       doc.setTextColor(...cGray)
       doc.text('Agua Purificada de Mesa · Bolivia', 15, 30)
-      doc.text('Soporte / WhatsApp: +591 71808300', 15, 35)
 
       // Recibo ID (Derecha)
       doc.setFont('helvetica', 'bold')
@@ -383,17 +381,7 @@ export default function DetallePedidoClient({ pedidoId }) {
     { titulo: 'Entregado y Pagado', desc: 'El pedido fue recibido y el pago fue verificado.', icon: Check }
   ]
 
-  // Enlace WhatsApp
-  const numWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '59171808300'
-  const waText = encodeURIComponent(`Hola Bajo Cero! Hice un pedido con ID #${pedido.id}.
-*Cliente:* ${cliente.nombre} ${cliente.apellido} (CI: ${cliente.ci})
-*Celular:* ${cliente.telefono}
-*Método de Pago:* ${pagoRelacion.metodo || 'Efectivo'} (${pagoRelacion.estado || 'Pendiente'})
-*Monto Total:* ${total.toFixed(2)} Bs.
-*Dirección:* ${cliente.direccion || ''}
 
-Quiero confirmar el pedido y coordinar la entrega.`)
-  const urlWhatsApp = `https://wa.me/${numWhatsApp}?text=${waText}`
 
   return (
     <>
@@ -579,32 +567,7 @@ Quiero confirmar el pedido y coordinar la entrega.`)
         {/* Columna Derecha: Datos de entrega y Acciones */}
         <div className="lg:col-span-4" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-          {/* Coordinación por WhatsApp */}
-          <div className="glass" style={{ borderRadius: '24px', padding: '28px', background: 'radial-gradient(ellipse at bottom left, rgba(16,185,129,0.08) 0%, transparent 70%)', border: '1px solid rgba(16,185,129,0.1)' }}>
-            <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '20px', marginTop: 0 }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981', display: 'inline-block' }} className="animate-pulse" />
-              Coordinar Entrega
-            </h3>
-            <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, margin: '0 0 20px' }}>
-              ¡Agiliza la entrega de tu pedido! Haz clic en el botón de abajo para enviar los detalles de tu compra y tu ubicación por WhatsApp directamente a nuestro soporte.
-            </p>
-            <a
-              href={urlWhatsApp}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                width: '100%', height: '46px', borderRadius: '999px',
-                background: '#10b981', color: 'white', fontWeight: 700, fontSize: '11px',
-                letterSpacing: '1.5px', textTransform: 'uppercase', textDecoration: 'none',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                transition: 'all 0.2s', boxShadow: '0 8px 24px rgba(16,185,129,0.2)',
-                cursor: 'pointer'
-              }}
-            >
-              <span>Coordinar por WhatsApp</span>
-              <ExternalLink size={14} />
-            </a>
-          </div>
+
 
           {/* Recibo e Impresión */}
           <div className="glass" style={{ borderRadius: '24px', padding: '28px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -750,7 +713,6 @@ Quiero confirmar el pedido y coordinar la entrega.`)
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <h1 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 6px', letterSpacing: '1px' }}>BAJO CERO</h1>
           <p style={{ fontSize: '12px', margin: '0', color: '#555' }}>Agua Purificada de Mesa · Bolivia</p>
-          <p style={{ fontSize: '12px', margin: '4px 0 0', color: '#555' }}>Celular/WhatsApp: 71808300</p>
         </div>
 
         <div style={{ borderBottom: '2px solid #000', paddingBottom: '16px', marginBottom: '24px' }}>

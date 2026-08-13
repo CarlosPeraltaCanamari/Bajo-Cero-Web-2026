@@ -307,22 +307,7 @@ export default function EnviosClient() {
               <ShoppingBag size={14} />
               Ir al Catálogo
             </Link>
-            <a 
-              href="https://wa.me/59171808300"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                height: '46px', padding: '0 32px', borderRadius: '999px',
-                background: 'rgba(255,255,255,0.06)', color: 'white',
-                fontWeight: 700, fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase',
-                textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                border: '1px solid rgba(255,255,255,0.1)',
-                transition: 'all 0.2s', cursor: 'pointer'
-              }} className="hover:bg-white/12 active:scale-98"
-            >
-              <MessageSquare size={14} />
-              Contacto WhatsApp
-            </a>
+
           </div>
         </motion.div>
 

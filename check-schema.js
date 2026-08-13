@@ -22,13 +22,15 @@ try {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function test() {
-  console.log("Querying single client row to inspect fields...");
-  const { data, error } = await supabase.from('cliente').select('*').limit(1);
-  if (error) {
-    console.error("Error:", error);
-  } else {
-    console.log("Client row structure:", data);
-  }
+  console.log("=== REPARTIDORES ===");
+  const { data: reps, error: errReps } = await supabase.from('repartidor').select('*');
+  if (errReps) console.error("Error reps:", errReps);
+  else console.log(reps);
+
+  console.log("\n=== RECIENTES VENTAS ===");
+  const { data: ventas, error: errVentas } = await supabase.from('venta').select('*').order('id', { ascending: false }).limit(5);
+  if (errVentas) console.error("Error ventas:", errVentas);
+  else console.log(ventas);
 }
 
 test();

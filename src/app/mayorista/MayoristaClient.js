@@ -141,17 +141,7 @@ export default function MayoristaClient() {
       
       toast.success('¡Solicitud recibida! Nos contactaremos contigo a la brevedad.', { id: toastId })
       
-      // WhatsApp redirección para agilizar la cotización
-      const numWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '59171808300'
-      const waText = encodeURIComponent(`Hola Bajo Cero! Quisiera solicitar información sobre compras corporativas/mayoristas.
-*Contacto:* ${cleanNombre}
-*Empresa/Negocio:* ${cleanEmpresa}
-*Teléfono:* ${cleanTelefono}
-*Email:* ${cleanEmail || 'No provisto'}
-*Volumen mensual estimado:* ${formVolumen} unidades/mes
-*Mensaje:* ${cleanMensaje || 'Interesado en cotizaciones'}`)
-      
-      window.open(`https://wa.me/${numWhatsApp}?text=${waText}`, '_blank')
+
 
       // Resetear formulario
       setFormNombre('')
@@ -166,22 +156,7 @@ export default function MayoristaClient() {
     }
   }
 
-  // WhatsApp directo desde calculadora
-  const handleCotizarCalculadora = () => {
-    const numWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '59171808300'
-    const waText = encodeURIComponent(`Hola Bajo Cero! Hice una simulación en su calculadora de mayorista y quisiera cotizar el siguiente pedido:
-*Producto:* ${productoSeleccionado.nombre}
-*Cantidad:* ${cantidad} unidades
-*Precio unitario oficial:* ${productoSeleccionado.precio.toFixed(2)} Bs.
-*Descuento obtenido:* ${porcentajeDescuento}%
-*Precio unitario con descuento:* ${precioUnitarioEfectivo.toFixed(2)} Bs.
-*Total estimado a pagar:* ${total.toFixed(2)} Bs.
-*Ahorro total:* ${descuentoMonto.toFixed(2)} Bs.
 
-Quedo atento para coordinar los detalles de facturación y entrega.`)
-
-    window.open(`https://wa.me/${numWhatsApp}?text=${waText}`, '_blank')
-  }
 
   return (
     <main style={{
@@ -507,33 +482,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
               </div>
             </div>
 
-            <button
-              onClick={handleCotizarCalculadora}
-              style={{
-                width: '100%',
-                height: '48px',
-                borderRadius: '999px',
-                background: 'var(--color-bc-orange)',
-                color: 'white',
-                fontWeight: 700,
-                fontSize: '12px',
-                letterSpacing: '1px',
-                textTransform: 'uppercase',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 8px 24px rgba(220,120,40,0.2)',
-                transition: 'all 0.2s',
-                marginTop: '20px'
-              }}
-              className="hover:opacity-90 active:scale-98"
-            >
-              <MessageSquare size={15} />
-              Enviar Cotización por WhatsApp
-            </button>
+
           </motion.div>
 
           {/* FORMULARIO DE CONTACTO (Derecha) */}
@@ -722,7 +671,7 @@ Quedo atento para coordinar los detalles de facturación y entrega.`)
                 }}
                 className="hover:bg-white/12 active:scale-98"
               >
-                {enviando ? 'Enviando...' : 'Enviar Solicitud y Hablar por WhatsApp'}
+                {enviando ? 'Enviando...' : 'Enviar Solicitud'}
                 <ArrowRight size={13} />
               </button>
             </form>
